@@ -41,14 +41,22 @@ O **Raise Capital** é uma aplicação mobile moderna e intuitiva para gestão d
 - Tipografia hierárquica com pesos otimizados
 - Ícones da biblioteca Ionicons
 
-## 🛠️ Tecnologias Utilizadas
+## 🚀 Tecnologias
 
-- **[React Native](https://reactnative.dev/)** - Framework para desenvolvimento mobile
-- **[Expo](https://expo.dev/)** - Plataforma para desenvolvimento e deploy
-- **[React Navigation](https://reactnavigation.org/)** - Navegação entre telas
-- **[React Native Gifted Charts](https://github.com/Abhinandan-Kushwaha/react-native-gifted-charts)** - Gráficos interativos
-- **[Expo Linear Gradient](https://docs.expo.dev/versions/latest/sdk/linear-gradient/)** - Gradientes nativos
-- **[Ionicons](https://ionic.io/ionicons)** - Biblioteca de ícones
+Este projeto foi desenvolvido com as seguintes tecnologias:
+
+- **React Native** - Framework para desenvolvimento mobile
+- **Expo SDK 54.0** - Plataforma para desenvolvimento React Native
+- **React Navigation** - Navegação entre telas
+- **Expo Linear Gradient** - Gradientes lineares
+- **React Native SVG** - Suporte a SVG
+- **TypeScript** - Tipagem estática (planejado)
+
+### Design System
+- **Cores**: Paleta moderna com tons de azul e cinza
+- **Tipografia**: Fontes system nativas otimizadas
+- **Componentes**: Interface consistente e reutilizável
+- **Responsividade**: Adaptação automática para diferentes tamanhos de tela
 
 ## 📦 Instalação e Configuração
 
@@ -147,22 +155,19 @@ Contribuições são sempre bem-vindas! Para contribuir:
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a **Apache License 2.0** - veja o arquivo [LICENSE](./LICENSE) para detalhes.
+Este projeto está sob **Licença Proprietária - Todos os Direitos Reservados**.
 
-### Resumo da Licença Apache 2.0
+### ⚠️ Restrições Importantes:
+- **Proibido uso comercial** de qualquer natureza
+- **Proibida cópia, modificação ou distribuição** sem autorização expressa
+- **Apenas para fins educacionais** e demonstração pessoal
+- **Todos os direitos de propriedade intelectual** pertencem ao autor
 
-- ✅ **Uso comercial** - Pode ser usado comercialmente
-- ✅ **Modificação** - Pode ser modificado
-- ✅ **Distribuição** - Pode ser distribuído
-- ✅ **Uso privado** - Pode ser usado privativamente
-- ⚠️ **Responsabilidade** - Inclui limitação de responsabilidade
-- ⚠️ **Garantia** - Não inclui garantia
+### 📞 Licenciamento Comercial
+Para solicitações de licenciamento comercial ou outras permissões, entre em contato:
+- **Email**: jhonas.martins@email.com
 
-**Regras Rígidas:**
-- Deve incluir o aviso de copyright
-- Deve incluir o texto da licença
-- Mudanças devem ser documentadas
-- Deve preservar avisos de patente
+**AVISO**: O uso não autorizado pode resultar em ação legal.
 
 ## 👨‍💻 Autor
 

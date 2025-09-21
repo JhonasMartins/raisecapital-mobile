@@ -205,6 +205,267 @@ function WalletScreen() {
   );
 }
 
+// Portfolio Screen com abas Ativos e Finalizados
+function PortfolioScreen() {
+  const [activeTab, setActiveTab] = useState('ativos');
+
+  // Dados mock para investimentos ativos
+  const activosData = [
+    {
+      id: 1,
+      nome: 'CRI Smart House Sênior 2',
+      tipo: 'CRI',
+      valor: 50000,
+      rentabilidade: 12.5,
+      prazo: '24 meses',
+      status: 'ativo',
+      dataInvestimento: '15/09/2024',
+      proximoRendimento: '15/12/2024'
+    },
+    {
+      id: 2,
+      nome: 'Debênture Verde Energia',
+      tipo: 'Debênture',
+      valor: 25000,
+      rentabilidade: 10.8,
+      prazo: '36 meses',
+      status: 'ativo',
+      dataInvestimento: '20/08/2024',
+      proximoRendimento: '20/11/2024'
+    },
+    {
+      id: 3,
+      nome: 'FII Logística Premium',
+      tipo: 'FII',
+      valor: 15000,
+      rentabilidade: 8.2,
+      prazo: 'Indeterminado',
+      status: 'ativo',
+      dataInvestimento: '10/07/2024',
+      proximoRendimento: '10/01/2025'
+    }
+  ];
+
+  // Dados mock para investimentos finalizados
+  const finalizadosData = [
+    {
+      id: 4,
+      nome: 'CDB Premium Banco XYZ',
+      tipo: 'CDB',
+      valorInicial: 30000,
+      valorFinal: 33600,
+      rentabilidade: 12.0,
+      prazo: '12 meses',
+      status: 'finalizado',
+      dataInvestimento: '15/01/2023',
+      dataResgate: '15/01/2024',
+      lucro: 3600
+    },
+    {
+      id: 5,
+      nome: 'LCI Habitação Segura',
+      tipo: 'LCI',
+      valorInicial: 20000,
+      valorFinal: 22400,
+      rentabilidade: 12.0,
+      prazo: '12 meses',
+      status: 'finalizado',
+      dataInvestimento: '10/03/2023',
+      dataResgate: '10/03/2024',
+      lucro: 2400
+    }
+  ];
+
+  const formatBRL = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
+
+  const InvestmentCard = ({ investment, isActive = true }) => (
+    <View style={[styles.card, styles.investmentCard]}>
+      <View style={styles.investmentHeader}>
+        <View style={styles.investmentInfo}>
+          <Text style={styles.investmentName}>{investment.nome}</Text>
+          <View style={styles.investmentTypeContainer}>
+            <Text style={styles.investmentType}>{investment.tipo}</Text>
+            <View style={[styles.statusBadge, isActive ? styles.statusActive : styles.statusFinalized]}>
+              <Text style={[styles.statusText, isActive ? styles.statusActiveText : styles.statusFinalizedText]}>
+                {isActive ? 'Ativo' : 'Finalizado'}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.investmentDetails}>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>
+            {isActive ? 'Valor investido' : 'Valor inicial'}
+          </Text>
+          <Text style={styles.investmentValue}>
+            {formatBRL(isActive ? investment.valor : investment.valorInicial)}
+          </Text>
+        </View>
+
+        {!isActive && (
+          <View style={styles.investmentRow}>
+            <Text style={styles.investmentLabel}>Valor final</Text>
+            <Text style={styles.investmentValueFinal}>{formatBRL(investment.valorFinal)}</Text>
+          </View>
+        )}
+
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Rentabilidade</Text>
+          <Text style={styles.investmentRentability}>
+            {investment.rentabilidade}% a.a.
+          </Text>
+        </View>
+
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Prazo</Text>
+          <Text style={styles.investmentPeriod}>{investment.prazo}</Text>
+        </View>
+
+        {!isActive && (
+          <View style={[styles.investmentRow, styles.profitRow]}>
+            <Text style={styles.investmentLabel}>Lucro obtido</Text>
+            <Text style={styles.investmentProfit}>+ {formatBRL(investment.lucro)}</Text>
+          </View>
+        )}
+      </View>
+
+      <View style={styles.investmentFooter}>
+        <Text style={styles.investmentDate}>
+          {isActive 
+            ? `Investido em ${investment.dataInvestimento}` 
+            : `Resgatado em ${investment.dataResgate}`
+          }
+        </Text>
+        {isActive && (
+          <TouchableOpacity style={styles.detailsButton}>
+            <Text style={styles.detailsButtonText}>Ver detalhes</Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.accent} />
+          </TouchableOpacity>
+        )}
+      </View>
+    </View>
+  );
+
+  const EmptyState = ({ isActive }) => (
+    <View style={[styles.card, styles.emptyStateCard]}>
+      <View style={styles.emptyIcon}>
+        <Ionicons 
+          name={isActive ? "trending-up-outline" : "checkmark-circle-outline"} 
+          size={32} 
+          color={colors.accent} 
+        />
+      </View>
+      <Text style={styles.emptyTitle}>
+        {isActive ? 'Nenhum investimento ativo' : 'Nenhum investimento finalizado'}
+      </Text>
+      <Text style={styles.emptySubtitle}>
+        {isActive 
+          ? 'Comece a investir para ver seus ativos aqui'
+          : 'Seus investimentos finalizados aparecerão aqui'
+        }
+      </Text>
+      {isActive && (
+        <TouchableOpacity style={styles.ctaButton}>
+          <Text style={styles.ctaButtonText}>Explorar oportunidades</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style="dark" />
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <Text style={styles.topbarTitle}>Meu Portfolio</Text>
+          <View style={styles.topbarIcons}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="search-outline" size={20} color={colors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.iconButton, { marginLeft: 8 }]}>
+              <Ionicons name="filter-outline" size={20} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Resumo do Portfolio */}
+        <View style={[styles.card, styles.portfolioSummary]}>
+          <Text style={styles.summaryTitle}>Resumo do Portfolio</Text>
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Total investido</Text>
+              <Text style={styles.summaryValue}>{formatBRL(90000)}</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Rendimento total</Text>
+              <Text style={styles.summaryProfit}>+ {formatBRL(6000)}</Text>
+            </View>
+          </View>
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Investimentos ativos</Text>
+              <Text style={styles.summaryCount}>3</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Finalizados</Text>
+              <Text style={styles.summaryCount}>2</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Abas */}
+        <View style={styles.tabContainer}>
+          <TouchableOpacity 
+            style={[styles.tabButton, activeTab === 'ativos' && styles.tabButtonActive]}
+            onPress={() => setActiveTab('ativos')}
+          >
+            <Text style={[styles.tabText, activeTab === 'ativos' && styles.tabTextActive]}>
+              Ativos ({activosData.length})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.tabButton, activeTab === 'finalizados' && styles.tabButtonActive]}
+            onPress={() => setActiveTab('finalizados')}
+          >
+            <Text style={[styles.tabText, activeTab === 'finalizados' && styles.tabTextActive]}>
+              Finalizados ({finalizadosData.length})
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Conteúdo das abas */}
+        {activeTab === 'ativos' ? (
+          activosData.length > 0 ? (
+            activosData.map(investment => (
+              <InvestmentCard key={investment.id} investment={investment} isActive={true} />
+            ))
+          ) : (
+            <EmptyState isActive={true} />
+          )
+        ) : (
+          finalizadosData.length > 0 ? (
+            finalizadosData.map(investment => (
+              <InvestmentCard key={investment.id} investment={investment} isActive={false} />
+            ))
+          ) : (
+            <EmptyState isActive={false} />
+          )
+        )}
+
+        <View style={{ height: 50 }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 // ---------------- Placeholders for other tabs ----------------
 function PlaceholderScreen({ title }) {
   return (
@@ -253,7 +514,7 @@ export default function App() {
         />
         <Tab.Screen
           name="Portfolio"
-          children={() => <PlaceholderScreen title="Portfolio" />}
+          component={PortfolioScreen}
           options={{
             tabBarIcon: ({ color }) => (
               <Ionicons name="grid-outline" color={color} size={24} />
@@ -610,4 +871,234 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     elevation: 8,
   },
-});
+
+  // Portfolio Screen Styles
+  portfolioSummary: {
+    marginBottom: 20,
+  },
+  summaryTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 16,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  summaryItem: {
+    flex: 1,
+  },
+  summaryLabel: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 4,
+  },
+  summaryValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  summaryProfit: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.success,
+  },
+  summaryCount: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.accent,
+  },
+
+  // Tab Container
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.cardBackground,
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 20,
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  tabButtonActive: {
+    backgroundColor: colors.accent,
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.textSecondary,
+  },
+  tabTextActive: {
+    color: '#FFFFFF',
+  },
+
+  // Investment Cards
+  investmentCard: {
+    marginBottom: 16,
+  },
+  investmentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  investmentInfo: {
+    flex: 1,
+  },
+  investmentName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 8,
+  },
+  investmentTypeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  investmentType: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.textSecondary,
+    backgroundColor: colors.background,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  statusActive: {
+    backgroundColor: '#E8F5E8',
+  },
+  statusFinalized: {
+    backgroundColor: '#E8F0FF',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  statusActiveText: {
+    color: '#2E7D32',
+  },
+  statusFinalizedText: {
+    color: '#1976D2',
+  },
+
+  // Investment Details
+  investmentDetails: {
+    marginBottom: 16,
+  },
+  investmentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  investmentLabel: {
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+  investmentValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  investmentValueFinal: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.success,
+  },
+  investmentRentability: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.accent,
+  },
+  investmentPeriod: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.text,
+  },
+  profitRow: {
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    marginTop: 8,
+  },
+  investmentProfit: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.success,
+  },
+
+  // Investment Footer
+  investmentFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  investmentDate: {
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+  detailsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  detailsButtonText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.accent,
+    marginRight: 4,
+  },
+
+  // Empty State
+  emptyStateCard: {
+    alignItems: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  emptyIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  ctaButton: {
+    backgroundColor: colors.accent,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  ctaButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },});
