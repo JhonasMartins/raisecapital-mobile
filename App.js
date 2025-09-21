@@ -367,10 +367,10 @@ function WalletScreen() {
 
 // Portfolio Screen com abas Ativos e Finalizados
 function PortfolioScreen() {
-  const [activeTab, setActiveTab] = useState('ativos');
+  const [activeFilter, setActiveFilter] = useState('todos');
 
-  // Dados mock para investimentos ativos
-  const activosData = [
+  // Dados mock para todos os investimentos (ativos, pendentes e finalizados)
+  const allInvestments = [
     {
       id: 1,
       nome: 'CRI Smart House Sênior 2',
@@ -403,11 +403,29 @@ function PortfolioScreen() {
       status: 'ativo',
       dataInvestimento: '10/07/2024',
       proximoRendimento: '10/01/2025'
-    }
-  ];
-
-  // Dados mock para investimentos finalizados
-  const finalizadosData = [
+    },
+    {
+      id: 6,
+      nome: 'CRI Residencial Norte',
+      tipo: 'CRI',
+      valor: 40000,
+      rentabilidade: 11.5,
+      prazo: '18 meses',
+      status: 'pendente',
+      dataInvestimento: '01/12/2024',
+      proximoRendimento: 'Aguardando aprovação'
+    },
+    {
+      id: 7,
+      nome: 'Debênture Infraestrutura',
+      tipo: 'Debênture',
+      valor: 35000,
+      rentabilidade: 13.2,
+      prazo: '24 meses',
+      status: 'pendente',
+      dataInvestimento: '05/12/2024',
+      proximoRendimento: 'Em análise'
+    },
     {
       id: 4,
       nome: 'CDB Premium Banco XYZ',
@@ -436,6 +454,14 @@ function PortfolioScreen() {
     }
   ];
 
+  // Filtrar investimentos baseado no filtro ativo
+  const filteredInvestments = useMemo(() => {
+    if (activeFilter === 'todos') {
+      return allInvestments;
+    }
+    return allInvestments.filter(investment => investment.status === activeFilter);
+  }, [allInvestments, activeFilter]);
+
   const formatBRL = (value) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -443,75 +469,89 @@ function PortfolioScreen() {
     }).format(value);
   };
 
-  const InvestmentCard = ({ investment, isActive = true }) => (
-    <View style={[styles.card, styles.investmentCard]}>
-      <View style={styles.investmentHeader}>
-        <View style={styles.investmentInfo}>
-          <Text style={styles.investmentName}>{investment.nome}</Text>
-          <View style={styles.investmentTypeContainer}>
-            <Text style={styles.investmentType}>{investment.tipo}</Text>
-            <View style={[styles.statusBadge, isActive ? styles.statusActive : styles.statusFinalized]}>
-              <Text style={[styles.statusText, isActive ? styles.statusActiveText : styles.statusFinalizedText]}>
-                {isActive ? 'Ativo' : 'Finalizado'}
-              </Text>
+  const InvestmentCard = ({ investment }) => {
+    const getStatusStyle = (status) => {
+      switch (status) {
+        case 'ativo':
+          return { badge: styles.statusActive, text: styles.statusActiveText, label: 'Ativo' };
+        case 'pendente':
+          return { badge: styles.statusPending, text: styles.statusPendingText, label: 'Pendente' };
+        case 'finalizado':
+          return { badge: styles.statusFinalized, text: styles.statusFinalizedText, label: 'Finalizado' };
+        default:
+          return { badge: styles.statusActive, text: styles.statusActiveText, label: 'Ativo' };
+      }
+    };
+
+    const statusStyle = getStatusStyle(investment.status);
+    const isActive = investment.status === 'ativo';
+    const isPending = investment.status === 'pendente';
+
+    return (
+      <View style={[styles.card, styles.investmentCard]}>
+        <View style={styles.investmentHeader}>
+          <View style={styles.investmentInfo}>
+            <Text style={styles.investmentName}>{investment.nome}</Text>
+            <View style={styles.investmentTypeContainer}>
+              <Text style={styles.investmentType}>{investment.tipo}</Text>
+              <View style={[styles.statusBadge, statusStyle.badge]}>
+                <Text style={[styles.statusText, statusStyle.text]}>
+                  {statusStyle.label}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.investmentDetails}>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>
-            {isActive ? 'Valor investido' : 'Valor inicial'}
-          </Text>
-          <Text style={styles.investmentValue}>
-            {formatBRL(isActive ? investment.valor : investment.valorInicial)}
-          </Text>
-        </View>
-
-        {!isActive && (
+        <View style={styles.investmentDetails}>
           <View style={styles.investmentRow}>
-            <Text style={styles.investmentLabel}>Valor final</Text>
-            <Text style={styles.investmentValueFinal}>{formatBRL(investment.valorFinal)}</Text>
+            <Text style={styles.investmentLabel}>
+              {isActive || isPending ? 'Valor investido' : 'Valor inicial'}
+            </Text>
+            <Text style={styles.investmentValue}>
+              {formatBRL(isActive || isPending ? investment.valor : investment.valorInicial)}
+            </Text>
           </View>
-        )}
 
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Rentabilidade</Text>
-          <Text style={styles.investmentRentability}>
-            {investment.rentabilidade}% a.a.
+          {!isActive && !isPending && (
+            <View style={styles.investmentRow}>
+              <Text style={styles.investmentLabel}>Valor final</Text>
+              <Text style={styles.investmentValueFinal}>{formatBRL(investment.valorFinal)}</Text>
+            </View>
+          )}
+
+          <View style={styles.investmentRow}>
+            <Text style={styles.investmentLabel}>Rentabilidade</Text>
+            <Text style={styles.investmentRentability}>
+              {investment.rentabilidade}% a.a.
+            </Text>
+          </View>
+
+          <View style={styles.investmentRow}>
+            <Text style={styles.investmentLabel}>Prazo</Text>
+            <Text style={styles.investmentPeriod}>{investment.prazo}</Text>
+          </View>
+
+          {!isActive && !isPending && (
+            <View style={[styles.investmentRow, styles.profitRow]}>
+              <Text style={styles.investmentLabel}>Lucro obtido</Text>
+              <Text style={styles.investmentProfit}>+ {formatBRL(investment.lucro)}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.investmentFooter}>
+          <Text style={styles.investmentDate}>
+            {isActive || isPending ? `Investido em ${investment.dataInvestimento}` : `Finalizado em ${investment.dataFinalizacao}`}
           </Text>
-        </View>
-
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Prazo</Text>
-          <Text style={styles.investmentPeriod}>{investment.prazo}</Text>
-        </View>
-
-        {!isActive && (
-          <View style={[styles.investmentRow, styles.profitRow]}>
-            <Text style={styles.investmentLabel}>Lucro obtido</Text>
-            <Text style={styles.investmentProfit}>+ {formatBRL(investment.lucro)}</Text>
-          </View>
-        )}
-      </View>
-
-      <View style={styles.investmentFooter}>
-        <Text style={styles.investmentDate}>
-          {isActive 
-            ? `Investido em ${investment.dataInvestimento}` 
-            : `Resgatado em ${investment.dataResgate}`
-          }
-        </Text>
-        {isActive && (
           <TouchableOpacity style={styles.detailsButton}>
             <Text style={styles.detailsButtonText}>Ver detalhes</Text>
-            <Ionicons name="chevron-forward" size={16} color={colors.accent} />
+            <Ionicons name="chevron-forward" size={12} color={colors.accent} />
           </TouchableOpacity>
-        )}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   const EmptyState = ({ isActive }) => (
     <View style={[styles.card, styles.emptyStateCard]}>
@@ -571,54 +611,53 @@ function PortfolioScreen() {
           </View>
           <View style={styles.summaryRow}>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Investimentos ativos</Text>
-              <Text style={styles.summaryCount}>3</Text>
+              <Text style={styles.summaryLabel}>Total de investimentos</Text>
+              <Text style={styles.summaryCount}>{filteredInvestments.length}</Text>
             </View>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Finalizados</Text>
-              <Text style={styles.summaryCount}>2</Text>
+              <Text style={styles.summaryLabel}>
+                {activeFilter === 'todos' ? 'Ativos' : 
+                 activeFilter === 'ativo' ? 'Ativos' :
+                 activeFilter === 'pendente' ? 'Pendentes' : 'Finalizados'}
+              </Text>
+              <Text style={styles.summaryCount}>
+                {activeFilter === 'todos' 
+                  ? allInvestments.filter(inv => inv.status === 'ativo').length
+                  : filteredInvestments.length}
+              </Text>
             </View>
           </View>
         </View>
 
-        {/* Abas */}
-        <View style={styles.tabContainer}>
-          <TouchableOpacity 
-            style={[styles.tabButton, activeTab === 'ativos' && styles.tabButtonActive]}
-            onPress={() => setActiveTab('ativos')}
-          >
-            <Text style={[styles.tabText, activeTab === 'ativos' && styles.tabTextActive]}>
-              Ativos ({activosData.length})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.tabButton, activeTab === 'finalizados' && styles.tabButtonActive]}
-            onPress={() => setActiveTab('finalizados')}
-          >
-            <Text style={[styles.tabText, activeTab === 'finalizados' && styles.tabTextActive]}>
-              Finalizados ({finalizadosData.length})
-            </Text>
-          </TouchableOpacity>
+        {/* Filtros */}
+        <View style={styles.filterContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
+            {['todos', 'ativo', 'pendente', 'finalizado'].map((filter) => (
+              <TouchableOpacity
+                key={filter}
+                style={[
+                  styles.filterButton,
+                  activeFilter === filter && styles.filterButtonActive
+                ]}
+                onPress={() => setActiveFilter(filter)}
+              >
+                <Text style={[
+                  styles.filterText,
+                  activeFilter === filter && styles.filterTextActive
+                ]}>
+                  {filter === 'todos' ? 'Todos' : 
+                   filter === 'ativo' ? 'Ativos' :
+                   filter === 'pendente' ? 'Pendentes' : 'Finalizados'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
-        {/* Conteúdo das abas */}
-        {activeTab === 'ativos' ? (
-          activosData.length > 0 ? (
-            activosData.map(investment => (
-              <InvestmentCard key={investment.id} investment={investment} isActive={true} />
-            ))
-          ) : (
-            <EmptyState isActive={true} />
-          )
-        ) : (
-          finalizadosData.length > 0 ? (
-            finalizadosData.map(investment => (
-              <InvestmentCard key={investment.id} investment={investment} isActive={false} />
-            ))
-          ) : (
-            <EmptyState isActive={false} />
-          )
-        )}
+        {/* Lista de investimentos filtrados */}
+        {filteredInvestments.map(investment => (
+          <InvestmentCard key={investment.id} investment={investment} isActive={investment.status === 'ativo'} />
+        ))}
 
         <View style={{ height: 50 }} />
       </ScrollView>
@@ -1294,4 +1333,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+
+  // Filter Styles
+  filterContainer: {
+    marginBottom: 16,
+  },
+  filterScroll: {
+    paddingHorizontal: 4,
+    gap: 8,
+  },
+  filterButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  filterButtonActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  filterText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.textSecondary,
+  },
+  filterTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '600',
   },});
