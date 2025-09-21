@@ -165,7 +165,7 @@ Este projeto está sob **Licença Proprietária - Todos os Direitos Reservados**
 
 ### 📞 Licenciamento Comercial
 Para solicitações de licenciamento comercial ou outras permissões, entre em contato:
-- **Email**: jhonas.martins@email.com
+- **Email**: contato@codnodo.com
 
 **AVISO**: O uso não autorizado pode resultar em ação legal.
 
@@ -185,6 +185,6 @@ Para solicitações de licenciamento comercial ou outras permissões, entre em c
 ---
 
 <div align="center">
-  <p>Feito com ❤️ por <a href="https://github.com/JhonasMartins">Jhonas Martins</a></p>
+  <p>Feito com ❤️ por <a href="https://github.com/JhonasMartins">Jhonas Leismann</a></p>
   <p>⭐ Se este projeto te ajudou, considere dar uma estrela!</p>
 </div>
