@@ -12,6 +12,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { PieChart } from 'react-native-gifted-charts';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -117,6 +118,155 @@ function OpportunityDetailsScreen({ route, navigation }) {
     </View>
   );
 
+  // Tab Visão Geral
+  const OverviewTab = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      {/* Capa */}
+      <View style={styles.coverContainer}>
+        <View style={styles.coverPlaceholder}>
+          <Ionicons name="image-outline" size={48} color={colors.sub} />
+          <Text style={styles.coverText}>Capa do Projeto</Text>
+        </View>
+      </View>
+
+      {/* Informações Principais */}
+      <View style={[styles.card, styles.mainInfoCard]}>
+        <Text style={styles.opportunityTitle}>{opportunityDetails.nome}</Text>
+        <Text style={styles.opportunityType}>{opportunityDetails.tipo}</Text>
+        
+        <View style={styles.mainInfoGrid}>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Rentabilidade Alvo</Text>
+            <Text style={styles.mainInfoValue}>{opportunityDetails.rentabilidadeAlvo}</Text>
+          </View>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Investimento Mínimo</Text>
+            <Text style={styles.mainInfoValue}>{opportunityDetails.investimentoMinimo}</Text>
+          </View>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Prazo</Text>
+            <Text style={styles.mainInfoValue}>{opportunityDetails.prazo}</Text>
+          </View>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Modalidade</Text>
+            <Text style={styles.mainInfoValue}>{opportunityDetails.modalidade}</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Status com Gráfico */}
+      <InfoCard title="Status do Investimento">
+        <ProgressChart percentage={opportunityDetails.statusProgress} />
+        <View style={styles.statusInfo}>
+          <View style={styles.statusRow}>
+            <Text style={styles.statusLabel}>Meta Total</Text>
+            <Text style={styles.statusValue}>{formatBRL(opportunityDetails.metaTotal)}</Text>
+          </View>
+          <View style={styles.statusRow}>
+            <Text style={styles.statusLabel}>Valor Captado</Text>
+            <Text style={styles.statusValueHighlight}>{formatBRL(opportunityDetails.valorCaptado)}</Text>
+          </View>
+          <View style={styles.statusRow}>
+            <Text style={styles.statusLabel}>Restante</Text>
+            <Text style={styles.statusValue}>{formatBRL(opportunityDetails.metaTotal - opportunityDetails.valorCaptado)}</Text>
+          </View>
+        </View>
+      </InfoCard>
+
+      {/* Investidores */}
+      <InfoCard title="Investidores">
+        <View style={styles.investorsGrid}>
+          <View style={styles.investorStat}>
+            <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.total}</Text>
+            <Text style={styles.investorStatLabel}>Total de Investidores</Text>
+          </View>
+          <View style={styles.investorStat}>
+            <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.ticketMedio}</Text>
+            <Text style={styles.investorStatLabel}>Ticket Médio</Text>
+          </View>
+          <View style={styles.investorStat}>
+            <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.maiorInvestimento}</Text>
+            <Text style={styles.investorStatLabel}>Maior Investimento</Text>
+          </View>
+        </View>
+      </InfoCard>
+
+      <View style={{ height: 32 }} />
+    </ScrollView>
+  );
+
+  // Tab Detalhes
+  const DetailsTab = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      {/* Sobre a Operação */}
+      <InfoCard title="Sobre a Operação">
+        <Text style={styles.contentText}>{opportunityDetails.sobreOperacao}</Text>
+      </InfoCard>
+
+      {/* Remuneração */}
+      <InfoCard title="Remuneração">
+        <Text style={styles.contentText}>{opportunityDetails.remuneracao}</Text>
+      </InfoCard>
+
+      {/* Sobre a Empresa */}
+      <InfoCard title="Sobre a Empresa">
+        <Text style={styles.contentText}>{opportunityDetails.sobreEmpresa}</Text>
+      </InfoCard>
+
+      {/* Empreendedores */}
+      <InfoCard title="Empreendedores">
+        {opportunityDetails.empreendedores.map((emp, index) => (
+          <View key={index} style={styles.entrepreneurCard}>
+            <View style={styles.entrepreneurAvatar}>
+              <Ionicons name="person" size={24} color={colors.accent} />
+            </View>
+            <View style={styles.entrepreneurInfo}>
+              <Text style={styles.entrepreneurName}>{emp.nome}</Text>
+              <Text style={styles.entrepreneurRole}>{emp.cargo}</Text>
+              <Text style={styles.entrepreneurExperience}>{emp.experiencia}</Text>
+            </View>
+          </View>
+        ))}
+      </InfoCard>
+
+      <View style={{ height: 32 }} />
+    </ScrollView>
+  );
+
+  // Tab Documentos
+  const DocumentsTab = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      {/* Documentos Jurídicos */}
+      <InfoCard title="Documentos Jurídicos">
+        {opportunityDetails.documentosJuridicos.map((doc, index) => (
+          <TouchableOpacity key={index} style={styles.documentItem}>
+            <Ionicons name="document-text-outline" size={20} color={colors.accent} />
+            <Text style={styles.documentName}>{doc}</Text>
+            <Ionicons name="download-outline" size={16} color={colors.sub} />
+          </TouchableOpacity>
+        ))}
+      </InfoCard>
+
+      {/* Informações Essenciais */}
+      <InfoCard title="Informações Essenciais do Projeto">
+        <View style={styles.essentialInfoGrid}>
+          {Object.entries(opportunityDetails.informacoesEssenciais).map(([key, value]) => (
+            <View key={key} style={styles.essentialInfoItem}>
+              <Text style={styles.essentialInfoLabel}>
+                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+              </Text>
+              <Text style={styles.essentialInfoValue}>{value}</Text>
+            </View>
+          ))}
+        </View>
+      </InfoCard>
+
+      <View style={{ height: 32 }} />
+    </ScrollView>
+  );
+
+  const TopTab = createMaterialTopTabNavigator();
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
@@ -135,141 +285,67 @@ function OpportunityDetailsScreen({ route, navigation }) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.detailsContainer} showsVerticalScrollIndicator={false}>
-        {/* Capa */}
-        <View style={styles.coverContainer}>
-          <View style={styles.coverPlaceholder}>
-            <Ionicons name="image-outline" size={48} color={colors.sub} />
-            <Text style={styles.coverText}>Capa do Projeto</Text>
-          </View>
-        </View>
+      {/* Tabs Navigator */}
+      <TopTab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.sub,
+          tabBarIndicatorStyle: {
+            backgroundColor: colors.accent,
+            height: 3,
+            borderRadius: 2,
+          },
+          tabBarStyle: {
+            backgroundColor: colors.card,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.cardBorder,
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarLabelStyle: {
+            fontSize: 14,
+            fontWeight: '600',
+            textTransform: 'none',
+          },
+          tabBarPressColor: colors.accentLight,
+        }}
+      >
+        <TopTab.Screen 
+          name="Visão Geral" 
+          component={OverviewTab}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="analytics-outline" size={20} color={color} />
+            ),
+          }}
+        />
+        <TopTab.Screen 
+          name="Detalhes" 
+          component={DetailsTab}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="information-circle-outline" size={20} color={color} />
+            ),
+          }}
+        />
+        <TopTab.Screen 
+          name="Documentos" 
+          component={DocumentsTab}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="document-text-outline" size={20} color={color} />
+            ),
+          }}
+        />
+      </TopTab.Navigator>
 
-        {/* Informações Principais */}
-        <View style={[styles.card, styles.mainInfoCard]}>
-          <Text style={styles.opportunityTitle}>{opportunityDetails.nome}</Text>
-          <Text style={styles.opportunityType}>{opportunityDetails.tipo}</Text>
-          
-          <View style={styles.mainInfoGrid}>
-            <View style={styles.mainInfoItem}>
-              <Text style={styles.mainInfoLabel}>Rentabilidade Alvo</Text>
-              <Text style={styles.mainInfoValue}>{opportunityDetails.rentabilidadeAlvo}</Text>
-            </View>
-            <View style={styles.mainInfoItem}>
-              <Text style={styles.mainInfoLabel}>Investimento Mínimo</Text>
-              <Text style={styles.mainInfoValue}>{opportunityDetails.investimentoMinimo}</Text>
-            </View>
-            <View style={styles.mainInfoItem}>
-              <Text style={styles.mainInfoLabel}>Prazo</Text>
-              <Text style={styles.mainInfoValue}>{opportunityDetails.prazo}</Text>
-            </View>
-            <View style={styles.mainInfoItem}>
-              <Text style={styles.mainInfoLabel}>Modalidade</Text>
-              <Text style={styles.mainInfoValue}>{opportunityDetails.modalidade}</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Status com Gráfico */}
-        <InfoCard title="Status do Investimento">
-          <ProgressChart percentage={opportunityDetails.statusProgress} />
-          <View style={styles.statusInfo}>
-            <View style={styles.statusRow}>
-              <Text style={styles.statusLabel}>Meta Total</Text>
-              <Text style={styles.statusValue}>{formatBRL(opportunityDetails.metaTotal)}</Text>
-            </View>
-            <View style={styles.statusRow}>
-              <Text style={styles.statusLabel}>Valor Captado</Text>
-              <Text style={styles.statusValueHighlight}>{formatBRL(opportunityDetails.valorCaptado)}</Text>
-            </View>
-            <View style={styles.statusRow}>
-              <Text style={styles.statusLabel}>Restante</Text>
-              <Text style={styles.statusValue}>{formatBRL(opportunityDetails.metaTotal - opportunityDetails.valorCaptado)}</Text>
-            </View>
-          </View>
-        </InfoCard>
-
-        {/* Sobre a Operação */}
-        <InfoCard title="Sobre a Operação">
-          <Text style={styles.contentText}>{opportunityDetails.sobreOperacao}</Text>
-        </InfoCard>
-
-        {/* Remuneração */}
-        <InfoCard title="Remuneração">
-          <Text style={styles.contentText}>{opportunityDetails.remuneracao}</Text>
-        </InfoCard>
-
-        {/* Sobre a Empresa */}
-        <InfoCard title="Sobre a Empresa">
-          <Text style={styles.contentText}>{opportunityDetails.sobreEmpresa}</Text>
-        </InfoCard>
-
-        {/* Empreendedores */}
-        <InfoCard title="Empreendedores">
-          {opportunityDetails.empreendedores.map((emp, index) => (
-            <View key={index} style={styles.entrepreneurCard}>
-              <View style={styles.entrepreneurAvatar}>
-                <Ionicons name="person" size={24} color={colors.accent} />
-              </View>
-              <View style={styles.entrepreneurInfo}>
-                <Text style={styles.entrepreneurName}>{emp.nome}</Text>
-                <Text style={styles.entrepreneurRole}>{emp.cargo}</Text>
-                <Text style={styles.entrepreneurExperience}>{emp.experiencia}</Text>
-              </View>
-            </View>
-          ))}
-        </InfoCard>
-
-        {/* Documentos Jurídicos */}
-        <InfoCard title="Documentos Jurídicos">
-          {opportunityDetails.documentosJuridicos.map((doc, index) => (
-            <TouchableOpacity key={index} style={styles.documentItem}>
-              <Ionicons name="document-text-outline" size={20} color={colors.accent} />
-              <Text style={styles.documentName}>{doc}</Text>
-              <Ionicons name="download-outline" size={16} color={colors.sub} />
-            </TouchableOpacity>
-          ))}
-        </InfoCard>
-
-        {/* Informações Essenciais */}
-        <InfoCard title="Informações Essenciais do Projeto">
-          <View style={styles.essentialInfoGrid}>
-            {Object.entries(opportunityDetails.informacoesEssenciais).map(([key, value]) => (
-              <View key={key} style={styles.essentialInfoItem}>
-                <Text style={styles.essentialInfoLabel}>
-                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                </Text>
-                <Text style={styles.essentialInfoValue}>{value}</Text>
-              </View>
-            ))}
-          </View>
-        </InfoCard>
-
-        {/* Investidores */}
-        <InfoCard title="Investidores">
-          <View style={styles.investorsGrid}>
-            <View style={styles.investorStat}>
-              <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.total}</Text>
-              <Text style={styles.investorStatLabel}>Total de Investidores</Text>
-            </View>
-            <View style={styles.investorStat}>
-              <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.ticketMedio}</Text>
-              <Text style={styles.investorStatLabel}>Ticket Médio</Text>
-            </View>
-            <View style={styles.investorStat}>
-              <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.maiorInvestimento}</Text>
-              <Text style={styles.investorStatLabel}>Maior Investimento</Text>
-            </View>
-          </View>
-        </InfoCard>
-
-        {/* Botão de Investir */}
+      {/* Botão de Investir Fixo */}
+      <View style={styles.investButtonContainer}>
         <TouchableOpacity style={styles.investNowButton}>
           <Text style={styles.investNowButtonText}>Investir Agora</Text>
           <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
         </TouchableOpacity>
-
-        <View style={{ height: 32 }} />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -1791,5 +1867,99 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.textSecondary,
     lineHeight: 20,
+  },
+  // Tab styles
+  tabContainer: {
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  tabBar: {
+    backgroundColor: colors.card,
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  tabIndicator: {
+    backgroundColor: colors.accent,
+    height: 3,
+    borderRadius: 2,
+  },
+  tabLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    textTransform: 'none',
+    letterSpacing: -0.2,
+  },
+  tabLabelActive: {
+    color: colors.accent,
+  },
+  tabLabelInactive: {
+    color: colors.textSecondary,
+  },
+  tabContent: {
+    flex: 1,
+    backgroundColor: colors.bg,
+  },
+  tabScrollView: {
+    flex: 1,
+    paddingBottom: 100, // Space for fixed button
+  },
+  fixedButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: colors.card,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: -2 },
+    elevation: 4,
+  },
+  investNowButton: {
+    backgroundColor: colors.accent,
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: colors.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  investNowButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  documentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: colors.card2,
+    borderRadius: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  documentIcon: {
+    marginRight: 12,
+  },
+  documentText: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.text,
+  },
+  documentDownloadIcon: {
+    padding: 4,
   },
 });
