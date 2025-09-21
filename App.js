@@ -1211,6 +1211,9 @@ const styles = StyleSheet.create({
   statusActive: {
     backgroundColor: '#E8F5E8',
   },
+  statusPending: {
+    backgroundColor: '#FFF3CD',
+  },
   statusFinalized: {
     backgroundColor: '#E8F0FF',
   },
@@ -1220,6 +1223,9 @@ const styles = StyleSheet.create({
   },
   statusActiveText: {
     color: '#2E7D32',
+  },
+  statusPendingText: {
+    color: '#856404',
   },
   statusFinalizedText: {
     color: '#1976D2',
@@ -1363,4 +1369,5 @@ const styles = StyleSheet.create({
   filterTextActive: {
     color: '#FFFFFF',
     fontWeight: '600',
-  },});
+  },
+});
