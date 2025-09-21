@@ -37,6 +37,319 @@ const colors = {
   legend6: '#EC4899',
 };
 
+// ---------------- Invest Screen ----------------
+function InvestScreen() {
+  const [activeTab, setActiveTab] = useState('oportunidades');
+
+  // Dados mock para oportunidades de investimento
+  const oportunidades = [
+    {
+      id: 1,
+      nome: 'Edifício Comercial SP',
+      tipo: 'Real Estate',
+      rentabilidade: '12,5% a.a.',
+      valorMinimo: 1000,
+      prazo: '24 meses',
+      risco: 'Médio',
+      captado: 75,
+      meta: 500000,
+      descricao: 'Investimento em edifício comercial na região central de São Paulo',
+      categoria: 'Imóveis',
+      status: 'Captando',
+    },
+    {
+      id: 2,
+      nome: 'Energia Solar Nordeste',
+      tipo: 'Energia Renovável',
+      rentabilidade: '15,2% a.a.',
+      valorMinimo: 500,
+      prazo: '36 meses',
+      risco: 'Baixo',
+      captado: 45,
+      meta: 1200000,
+      descricao: 'Projeto de energia solar fotovoltaica no interior do Ceará',
+      categoria: 'Energia',
+      status: 'Captando',
+    },
+    {
+      id: 3,
+      nome: 'Startup FinTech',
+      tipo: 'Tecnologia',
+      rentabilidade: '25,0% a.a.',
+      valorMinimo: 2500,
+      prazo: '48 meses',
+      risco: 'Alto',
+      captado: 30,
+      meta: 800000,
+      descricao: 'Investimento em startup de tecnologia financeira em crescimento',
+      categoria: 'Tecnologia',
+      status: 'Captando',
+    },
+    {
+      id: 4,
+      nome: 'Agronegócio Sustentável',
+      tipo: 'Agro',
+      rentabilidade: '18,7% a.a.',
+      valorMinimo: 1500,
+      prazo: '30 meses',
+      risco: 'Médio',
+      captado: 85,
+      meta: 2000000,
+      descricao: 'Projeto de agricultura sustentável com foco em exportação',
+      categoria: 'Agronegócio',
+      status: 'Captando',
+    },
+  ];
+
+  // Dados mock para meus investimentos
+  const meusInvestimentos = [
+    {
+      id: 1,
+      nome: 'Logística Urbana RJ',
+      tipo: 'Logística',
+      valorInvestido: 5000,
+      rentabilidade: '14,2% a.a.',
+      prazo: '18 meses',
+      dataInvestimento: '15/10/2024',
+      status: 'Ativo',
+      rendimentoAtual: 425.50,
+      categoria: 'Logística',
+    },
+    {
+      id: 2,
+      nome: 'E-commerce B2B',
+      tipo: 'Tecnologia',
+      valorInvestido: 3000,
+      rentabilidade: '22,1% a.a.',
+      prazo: '24 meses',
+      dataInvestimento: '08/09/2024',
+      status: 'Ativo',
+      rendimentoAtual: 331.50,
+      categoria: 'Tecnologia',
+    },
+  ];
+
+  const getRiscoColor = (risco) => {
+    switch (risco) {
+      case 'Baixo': return '#10B981';
+      case 'Médio': return '#F59E0B';
+      case 'Alto': return '#EF4444';
+      default: return colors.textSecondary;
+    }
+  };
+
+  const renderOportunidadeCard = (item) => (
+    <View key={item.id} style={[styles.card, styles.investmentCard]}>
+      <View style={styles.investmentHeader}>
+        <View style={styles.investmentInfo}>
+          <Text style={styles.investmentName}>{item.nome}</Text>
+          <View style={styles.investmentTypeContainer}>
+            <Text style={styles.investmentType}>{item.categoria}</Text>
+            <View style={[styles.statusBadge, { backgroundColor: getRiscoColor(item.risco) + '20' }]}>
+              <Text style={[styles.statusText, { color: getRiscoColor(item.risco) }]}>
+                {item.risco}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={[styles.statusBadge, styles.statusActive]}>
+          <Text style={[styles.statusText, styles.statusActiveText]}>
+            {item.status}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.investmentDetails}>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Rentabilidade</Text>
+          <Text style={styles.investmentRentability}>{item.rentabilidade}</Text>
+        </View>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Valor mínimo</Text>
+          <Text style={styles.investmentValue}>
+            R$ {item.valorMinimo.toLocaleString('pt-BR')}
+          </Text>
+        </View>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Prazo</Text>
+          <Text style={styles.investmentPeriod}>{item.prazo}</Text>
+        </View>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Captado</Text>
+          <Text style={styles.investmentValue}>
+            {item.captado}% (R$ {(item.meta * item.captado / 100).toLocaleString('pt-BR')})
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.progressContainer}>
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { width: `${item.captado}%` }]} />
+        </View>
+        <Text style={styles.progressText}>{item.captado}% captado</Text>
+      </View>
+
+      <View style={styles.investmentFooter}>
+        <Text style={styles.investmentDescription}>{item.descricao}</Text>
+        <TouchableOpacity style={styles.investButton}>
+          <Text style={styles.investButtonText}>Investir</Text>
+          <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  const renderMeuInvestimentoCard = (item) => (
+    <View key={item.id} style={[styles.card, styles.investmentCard]}>
+      <View style={styles.investmentHeader}>
+        <View style={styles.investmentInfo}>
+          <Text style={styles.investmentName}>{item.nome}</Text>
+          <View style={styles.investmentTypeContainer}>
+            <Text style={styles.investmentType}>{item.categoria}</Text>
+            <View style={[styles.statusBadge, styles.statusActive]}>
+              <Text style={[styles.statusText, styles.statusActiveText]}>
+                {item.status}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.rendimentoContainer}>
+          <Text style={styles.rendimentoLabel}>Rendimento</Text>
+          <Text style={styles.rendimentoValue}>
+            +R$ {item.rendimentoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.investmentDetails}>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Valor investido</Text>
+          <Text style={styles.investmentValue}>
+            R$ {item.valorInvestido.toLocaleString('pt-BR')}
+          </Text>
+        </View>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Rentabilidade</Text>
+          <Text style={styles.investmentRentability}>{item.rentabilidade}</Text>
+        </View>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Prazo</Text>
+          <Text style={styles.investmentPeriod}>{item.prazo}</Text>
+        </View>
+        <View style={styles.investmentRow}>
+          <Text style={styles.investmentLabel}>Data do investimento</Text>
+          <Text style={styles.investmentValue}>{item.dataInvestimento}</Text>
+        </View>
+      </View>
+
+      <View style={styles.investmentFooter}>
+        <TouchableOpacity style={styles.detailsButton}>
+          <Text style={styles.detailsButtonText}>Ver detalhes</Text>
+          <Ionicons name="chevron-forward" size={16} color={colors.accent} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style="dark" />
+      <ScrollView style={styles.container}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <Text style={styles.topbarTitle}>Investir</Text>
+          <View style={styles.topbarIcons}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="search-outline" size={20} color={colors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="filter-outline" size={20} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Resumo de investimentos */}
+        <View style={[styles.card, styles.investSummary]}>
+          <Text style={styles.summaryTitle}>Meus Investimentos</Text>
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Total Investido</Text>
+              <Text style={styles.summaryValue}>
+                R$ {meusInvestimentos.reduce((acc, inv) => acc + inv.valorInvestido, 0).toLocaleString('pt-BR')}
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Rendimento</Text>
+              <Text style={styles.summaryProfit}>
+                +R$ {meusInvestimentos.reduce((acc, inv) => acc + inv.rendimentoAtual, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Investimentos Ativos</Text>
+              <Text style={styles.summaryCount}>{meusInvestimentos.length}</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Rentabilidade Média</Text>
+              <Text style={styles.summaryValue}>18,2% a.a.</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Navegação por abas */}
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[styles.tabButton, activeTab === 'oportunidades' && styles.tabButtonActive]}
+            onPress={() => setActiveTab('oportunidades')}
+          >
+            <Text style={[styles.tabText, activeTab === 'oportunidades' && styles.tabTextActive]}>
+              Oportunidades
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tabButton, activeTab === 'meus' && styles.tabButtonActive]}
+            onPress={() => setActiveTab('meus')}
+          >
+            <Text style={[styles.tabText, activeTab === 'meus' && styles.tabTextActive]}>
+              Meus Investimentos
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Conteúdo das abas */}
+        {activeTab === 'oportunidades' ? (
+          <View>
+            {oportunidades.map(renderOportunidadeCard)}
+          </View>
+        ) : (
+          <View>
+            {meusInvestimentos.length > 0 ? (
+              meusInvestimentos.map(renderMeuInvestimentoCard)
+            ) : (
+              <View style={[styles.card, styles.emptyStateCard]}>
+                <View style={styles.emptyIcon}>
+                  <Ionicons name="trending-up-outline" size={32} color={colors.accent} />
+                </View>
+                <Text style={styles.emptyTitle}>Nenhum investimento ainda</Text>
+                <Text style={styles.emptySubtitle}>
+                  Explore as oportunidades disponíveis e comece a investir hoje mesmo.
+                </Text>
+                <TouchableOpacity 
+                  style={styles.ctaButton}
+                  onPress={() => setActiveTab('oportunidades')}
+                >
+                  <Text style={styles.ctaButtonText}>Ver Oportunidades</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 // ---------------- Wallet (Carteira) Screen ----------------
 function WalletScreen() {
   // Dados simulados
@@ -523,7 +836,7 @@ export default function App() {
         />
         <Tab.Screen
           name="Investir"
-          children={() => <PlaceholderScreen title="Investir" />}
+          component={InvestScreen}
           options={{
             tabBarLabel: 'Investir',
             tabBarIcon: ({ focused }) => (
@@ -872,6 +1185,64 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 
+  // Investment specific styles
+  investSummary: {
+    marginBottom: 20,
+  },
+  rendimentoContainer: {
+    alignItems: 'flex-end',
+  },
+  rendimentoLabel: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    marginBottom: 4,
+  },
+  rendimentoValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#10B981',
+  },
+  progressContainer: {
+    marginBottom: 16,
+  },
+  progressBar: {
+    height: 6,
+    backgroundColor: colors.card2,
+    borderRadius: 3,
+    marginBottom: 8,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: colors.accent,
+    borderRadius: 3,
+  },
+  progressText: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    textAlign: 'right',
+  },
+  investmentDescription: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    lineHeight: 18,
+    flex: 1,
+    marginRight: 12,
+  },
+  investButton: {
+    backgroundColor: colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    gap: 6,
+  },
+  investButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+
   // Portfolio Screen Styles
   portfolioSummary: {
     marginBottom: 20,
@@ -903,7 +1274,7 @@ const styles = StyleSheet.create({
   summaryProfit: {
     fontSize: 20,
     fontWeight: '700',
-    color: colors.success,
+    color: '#10B981',
   },
   summaryCount: {
     fontSize: 20,
@@ -914,7 +1285,7 @@ const styles = StyleSheet.create({
   // Tab Container
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.card2,
     borderRadius: 12,
     padding: 4,
     marginBottom: 20,
@@ -965,7 +1336,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: colors.textSecondary,
-    backgroundColor: colors.background,
+    backgroundColor: colors.card2,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -1015,7 +1386,7 @@ const styles = StyleSheet.create({
   investmentValueFinal: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.success,
+    color: '#10B981',
   },
   investmentRentability: {
     fontSize: 14,
@@ -1036,7 +1407,7 @@ const styles = StyleSheet.create({
   investmentProfit: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.success,
+    color: '#10B981',
   },
 
   // Investment Footer
@@ -1072,7 +1443,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: colors.background,
+    backgroundColor: colors.accentLight,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
