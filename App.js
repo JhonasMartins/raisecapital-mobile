@@ -39,8 +39,6 @@ const colors = {
 
 // ---------------- Invest Screen ----------------
 function InvestScreen() {
-  const [activeTab, setActiveTab] = useState('oportunidades');
-
   // Dados mock para oportunidades de investimento
   const oportunidades = [
     {
@@ -98,34 +96,6 @@ function InvestScreen() {
       descricao: 'Projeto de agricultura sustentável com foco em exportação',
       categoria: 'Agronegócio',
       status: 'Captando',
-    },
-  ];
-
-  // Dados mock para meus investimentos
-  const meusInvestimentos = [
-    {
-      id: 1,
-      nome: 'Logística Urbana RJ',
-      tipo: 'Logística',
-      valorInvestido: 5000,
-      rentabilidade: '14,2% a.a.',
-      prazo: '18 meses',
-      dataInvestimento: '15/10/2024',
-      status: 'Ativo',
-      rendimentoAtual: 425.50,
-      categoria: 'Logística',
-    },
-    {
-      id: 2,
-      nome: 'E-commerce B2B',
-      tipo: 'Tecnologia',
-      valorInvestido: 3000,
-      rentabilidade: '22,1% a.a.',
-      prazo: '24 meses',
-      dataInvestimento: '08/09/2024',
-      status: 'Ativo',
-      rendimentoAtual: 331.50,
-      categoria: 'Tecnologia',
     },
   ];
 
@@ -199,57 +169,7 @@ function InvestScreen() {
     </View>
   );
 
-  const renderMeuInvestimentoCard = (item) => (
-    <View key={item.id} style={[styles.card, styles.investmentCard]}>
-      <View style={styles.investmentHeader}>
-        <View style={styles.investmentInfo}>
-          <Text style={styles.investmentName}>{item.nome}</Text>
-          <View style={styles.investmentTypeContainer}>
-            <Text style={styles.investmentType}>{item.categoria}</Text>
-            <View style={[styles.statusBadge, styles.statusActive]}>
-              <Text style={[styles.statusText, styles.statusActiveText]}>
-                {item.status}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.rendimentoContainer}>
-          <Text style={styles.rendimentoLabel}>Rendimento</Text>
-          <Text style={styles.rendimentoValue}>
-            +R$ {item.rendimentoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-          </Text>
-        </View>
-      </View>
 
-      <View style={styles.investmentDetails}>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Valor investido</Text>
-          <Text style={styles.investmentValue}>
-            R$ {item.valorInvestido.toLocaleString('pt-BR')}
-          </Text>
-        </View>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Rentabilidade</Text>
-          <Text style={styles.investmentRentability}>{item.rentabilidade}</Text>
-        </View>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Prazo</Text>
-          <Text style={styles.investmentPeriod}>{item.prazo}</Text>
-        </View>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Data do investimento</Text>
-          <Text style={styles.investmentValue}>{item.dataInvestimento}</Text>
-        </View>
-      </View>
-
-      <View style={styles.investmentFooter}>
-        <TouchableOpacity style={styles.detailsButton}>
-          <Text style={styles.detailsButtonText}>Ver detalhes</Text>
-          <Ionicons name="chevron-forward" size={16} color={colors.accent} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -268,83 +188,10 @@ function InvestScreen() {
           </View>
         </View>
 
-        {/* Resumo de investimentos */}
-        <View style={[styles.card, styles.investSummary]}>
-          <Text style={styles.summaryTitle}>Meus Investimentos</Text>
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Total Investido</Text>
-              <Text style={styles.summaryValue}>
-                R$ {meusInvestimentos.reduce((acc, inv) => acc + inv.valorInvestido, 0).toLocaleString('pt-BR')}
-              </Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Rendimento</Text>
-              <Text style={styles.summaryProfit}>
-                +R$ {meusInvestimentos.reduce((acc, inv) => acc + inv.rendimentoAtual, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Investimentos Ativos</Text>
-              <Text style={styles.summaryCount}>{meusInvestimentos.length}</Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Rentabilidade Média</Text>
-              <Text style={styles.summaryValue}>18,2% a.a.</Text>
-            </View>
-          </View>
+        {/* Oportunidades de investimento */}
+        <View>
+          {oportunidades.map(renderOportunidadeCard)}
         </View>
-
-        {/* Navegação por abas */}
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tabButton, activeTab === 'oportunidades' && styles.tabButtonActive]}
-            onPress={() => setActiveTab('oportunidades')}
-          >
-            <Text style={[styles.tabText, activeTab === 'oportunidades' && styles.tabTextActive]}>
-              Oportunidades
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tabButton, activeTab === 'meus' && styles.tabButtonActive]}
-            onPress={() => setActiveTab('meus')}
-          >
-            <Text style={[styles.tabText, activeTab === 'meus' && styles.tabTextActive]}>
-              Meus Investimentos
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Conteúdo das abas */}
-        {activeTab === 'oportunidades' ? (
-          <View>
-            {oportunidades.map(renderOportunidadeCard)}
-          </View>
-        ) : (
-          <View>
-            {meusInvestimentos.length > 0 ? (
-              meusInvestimentos.map(renderMeuInvestimentoCard)
-            ) : (
-              <View style={[styles.card, styles.emptyStateCard]}>
-                <View style={styles.emptyIcon}>
-                  <Ionicons name="trending-up-outline" size={32} color={colors.accent} />
-                </View>
-                <Text style={styles.emptyTitle}>Nenhum investimento ainda</Text>
-                <Text style={styles.emptySubtitle}>
-                  Explore as oportunidades disponíveis e comece a investir hoje mesmo.
-                </Text>
-                <TouchableOpacity 
-                  style={styles.ctaButton}
-                  onPress={() => setActiveTab('oportunidades')}
-                >
-                  <Text style={styles.ctaButtonText}>Ver Oportunidades</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -1282,32 +1129,7 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
 
-  // Tab Container
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: colors.card2,
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 20,
-  },
-  tabButton: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  tabButtonActive: {
-    backgroundColor: colors.accent,
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.textSecondary,
-  },
-  tabTextActive: {
-    color: '#FFFFFF',
-  },
+
 
   // Investment Cards
   investmentCard: {
