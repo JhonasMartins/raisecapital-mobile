@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { PieChart } from 'react-native-gifted-charts';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -37,8 +38,242 @@ const colors = {
   legend6: '#EC4899',
 };
 
-// ---------------- Invest Screen ----------------
-function InvestScreen() {
+// ---------------- Opportunity Details Screen ----------------
+function OpportunityDetailsScreen({ route, navigation }) {
+  const { opportunity } = route.params;
+
+  // Dados mock expandidos para a oportunidade
+  const opportunityDetails = {
+    ...opportunity,
+    capa: 'https://via.placeholder.com/400x200/04a2fa/ffffff?text=Projeto+Imobiliário',
+    rentabilidadeAlvo: '12,5% a.a.',
+    investimentoMinimo: 'R$ 1.000',
+    prazo: '24 meses',
+    modalidade: 'Equity Crowdfunding',
+    statusProgress: 75, // Porcentagem alcançada
+    metaTotal: 500000,
+    valorCaptado: 375000,
+    
+    // Seções de conteúdo
+    sobreOperacao: 'Este projeto consiste na aquisição e desenvolvimento de um edifício comercial localizado na região central de São Paulo. O imóvel será reformado e modernizado para atender às demandas do mercado corporativo atual.',
+    
+    remuneracao: 'A remuneração será baseada na valorização do imóvel e nos rendimentos de aluguel. Projeção de retorno de 12,5% ao ano, com distribuição de dividendos semestrais.',
+    
+    sobreEmpresa: 'Fundada em 2015, a InvestCorp é uma empresa especializada em desenvolvimento imobiliário com foco em projetos comerciais de alto padrão. Já desenvolveu mais de 50 projetos bem-sucedidos.',
+    
+    empreendedores: [
+      { nome: 'João Silva', cargo: 'CEO', experiencia: '15 anos no mercado imobiliário' },
+      { nome: 'Maria Santos', cargo: 'Diretora Financeira', experiencia: '12 anos em finanças corporativas' }
+    ],
+    
+    documentosJuridicos: [
+      'Contrato de Investimento',
+      'Estatuto Social da Empresa',
+      'Certidões Negativas',
+      'Laudo de Avaliação do Imóvel'
+    ],
+    
+    informacoesEssenciais: {
+      tipoInvestimento: 'Real Estate',
+      setorEconomico: 'Imobiliário',
+      localizacao: 'São Paulo - SP',
+      dataInicio: '15/01/2024',
+      dataVencimento: '15/01/2026',
+      risco: 'Médio'
+    },
+    
+    investidores: {
+      total: 127,
+      ticketMedio: 'R$ 2.950',
+      maiorInvestimento: 'R$ 25.000'
+    }
+  };
+
+  const formatBRL = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
+
+  const ProgressChart = ({ percentage }) => (
+    <View style={styles.progressChartContainer}>
+      <View style={styles.progressCircle}>
+        <View style={[styles.progressFillCircle, { 
+          transform: [{ rotate: `${(percentage / 100) * 360}deg` }] 
+        }]} />
+        <View style={styles.progressInnerCircle}>
+          <Text style={styles.progressPercentage}>{percentage}%</Text>
+          <Text style={styles.progressLabel}>Captado</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  const InfoCard = ({ title, children }) => (
+    <View style={[styles.card, styles.infoCard]}>
+      <Text style={styles.infoCardTitle}>{title}</Text>
+      {children}
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style="dark" />
+      
+      {/* Header */}
+      <View style={styles.detailsHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.detailsHeaderTitle}>Detalhes da Oportunidade</Text>
+        <TouchableOpacity style={styles.shareButton}>
+          <Ionicons name="share-outline" size={24} color={colors.text} />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView style={styles.detailsContainer} showsVerticalScrollIndicator={false}>
+        {/* Capa */}
+        <View style={styles.coverContainer}>
+          <View style={styles.coverPlaceholder}>
+            <Ionicons name="image-outline" size={48} color={colors.sub} />
+            <Text style={styles.coverText}>Capa do Projeto</Text>
+          </View>
+        </View>
+
+        {/* Informações Principais */}
+        <View style={[styles.card, styles.mainInfoCard]}>
+          <Text style={styles.opportunityTitle}>{opportunityDetails.nome}</Text>
+          <Text style={styles.opportunityType}>{opportunityDetails.tipo}</Text>
+          
+          <View style={styles.mainInfoGrid}>
+            <View style={styles.mainInfoItem}>
+              <Text style={styles.mainInfoLabel}>Rentabilidade Alvo</Text>
+              <Text style={styles.mainInfoValue}>{opportunityDetails.rentabilidadeAlvo}</Text>
+            </View>
+            <View style={styles.mainInfoItem}>
+              <Text style={styles.mainInfoLabel}>Investimento Mínimo</Text>
+              <Text style={styles.mainInfoValue}>{opportunityDetails.investimentoMinimo}</Text>
+            </View>
+            <View style={styles.mainInfoItem}>
+              <Text style={styles.mainInfoLabel}>Prazo</Text>
+              <Text style={styles.mainInfoValue}>{opportunityDetails.prazo}</Text>
+            </View>
+            <View style={styles.mainInfoItem}>
+              <Text style={styles.mainInfoLabel}>Modalidade</Text>
+              <Text style={styles.mainInfoValue}>{opportunityDetails.modalidade}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Status com Gráfico */}
+        <InfoCard title="Status do Investimento">
+          <ProgressChart percentage={opportunityDetails.statusProgress} />
+          <View style={styles.statusInfo}>
+            <View style={styles.statusRow}>
+              <Text style={styles.statusLabel}>Meta Total</Text>
+              <Text style={styles.statusValue}>{formatBRL(opportunityDetails.metaTotal)}</Text>
+            </View>
+            <View style={styles.statusRow}>
+              <Text style={styles.statusLabel}>Valor Captado</Text>
+              <Text style={styles.statusValueHighlight}>{formatBRL(opportunityDetails.valorCaptado)}</Text>
+            </View>
+            <View style={styles.statusRow}>
+              <Text style={styles.statusLabel}>Restante</Text>
+              <Text style={styles.statusValue}>{formatBRL(opportunityDetails.metaTotal - opportunityDetails.valorCaptado)}</Text>
+            </View>
+          </View>
+        </InfoCard>
+
+        {/* Sobre a Operação */}
+        <InfoCard title="Sobre a Operação">
+          <Text style={styles.contentText}>{opportunityDetails.sobreOperacao}</Text>
+        </InfoCard>
+
+        {/* Remuneração */}
+        <InfoCard title="Remuneração">
+          <Text style={styles.contentText}>{opportunityDetails.remuneracao}</Text>
+        </InfoCard>
+
+        {/* Sobre a Empresa */}
+        <InfoCard title="Sobre a Empresa">
+          <Text style={styles.contentText}>{opportunityDetails.sobreEmpresa}</Text>
+        </InfoCard>
+
+        {/* Empreendedores */}
+        <InfoCard title="Empreendedores">
+          {opportunityDetails.empreendedores.map((emp, index) => (
+            <View key={index} style={styles.entrepreneurCard}>
+              <View style={styles.entrepreneurAvatar}>
+                <Ionicons name="person" size={24} color={colors.accent} />
+              </View>
+              <View style={styles.entrepreneurInfo}>
+                <Text style={styles.entrepreneurName}>{emp.nome}</Text>
+                <Text style={styles.entrepreneurRole}>{emp.cargo}</Text>
+                <Text style={styles.entrepreneurExperience}>{emp.experiencia}</Text>
+              </View>
+            </View>
+          ))}
+        </InfoCard>
+
+        {/* Documentos Jurídicos */}
+        <InfoCard title="Documentos Jurídicos">
+          {opportunityDetails.documentosJuridicos.map((doc, index) => (
+            <TouchableOpacity key={index} style={styles.documentItem}>
+              <Ionicons name="document-text-outline" size={20} color={colors.accent} />
+              <Text style={styles.documentName}>{doc}</Text>
+              <Ionicons name="download-outline" size={16} color={colors.sub} />
+            </TouchableOpacity>
+          ))}
+        </InfoCard>
+
+        {/* Informações Essenciais */}
+        <InfoCard title="Informações Essenciais do Projeto">
+          <View style={styles.essentialInfoGrid}>
+            {Object.entries(opportunityDetails.informacoesEssenciais).map(([key, value]) => (
+              <View key={key} style={styles.essentialInfoItem}>
+                <Text style={styles.essentialInfoLabel}>
+                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                </Text>
+                <Text style={styles.essentialInfoValue}>{value}</Text>
+              </View>
+            ))}
+          </View>
+        </InfoCard>
+
+        {/* Investidores */}
+        <InfoCard title="Investidores">
+          <View style={styles.investorsGrid}>
+            <View style={styles.investorStat}>
+              <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.total}</Text>
+              <Text style={styles.investorStatLabel}>Total de Investidores</Text>
+            </View>
+            <View style={styles.investorStat}>
+              <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.ticketMedio}</Text>
+              <Text style={styles.investorStatLabel}>Ticket Médio</Text>
+            </View>
+            <View style={styles.investorStat}>
+              <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.maiorInvestimento}</Text>
+              <Text style={styles.investorStatLabel}>Maior Investimento</Text>
+            </View>
+          </View>
+        </InfoCard>
+
+        {/* Botão de Investir */}
+        <TouchableOpacity style={styles.investNowButton}>
+          <Text style={styles.investNowButtonText}>Investir Agora</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+
+        <View style={{ height: 32 }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+function InvestScreen({ navigation }) {
   // Dados mock para oportunidades de investimento
   const oportunidades = [
     {
@@ -161,7 +396,10 @@ function InvestScreen() {
 
       <View style={styles.investmentFooter}>
         <Text style={styles.investmentDescription}>{item.descricao}</Text>
-        <TouchableOpacity style={styles.investButton}>
+        <TouchableOpacity 
+                  style={styles.investButton}
+                  onPress={() => navigation.navigate('OpportunityDetails', { opportunity: item })}
+                >
           <Text style={styles.investButtonText}>Investir</Text>
           <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
         </TouchableOpacity>
@@ -676,6 +914,16 @@ function PlaceholderScreen({ title }) {
 }
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function InvestStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="InvestMain" component={InvestScreen} />
+      <Stack.Screen name="OpportunityDetails" component={OpportunityDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   return (
@@ -722,7 +970,7 @@ export default function App() {
         />
         <Tab.Screen
           name="Investir"
-          component={InvestScreen}
+          component={InvestStack}
           options={{
             tabBarLabel: 'Investir',
             tabBarIcon: ({ focused }) => (
@@ -1369,5 +1617,179 @@ const styles = StyleSheet.create({
   filterTextActive: {
     color: '#FFFFFF',
     fontWeight: '600',
+  },
+
+  // Estilos da página de detalhes da oportunidade
+  detailsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  backButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: colors.card2,
+  },
+  detailsHeaderTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  shareButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: colors.card2,
+  },
+  detailsContainer: {
+    flex: 1,
+    backgroundColor: colors.bg,
+  },
+  coverContainer: {
+    margin: 20,
+    marginBottom: 16,
+  },
+  coverPlaceholder: {
+    height: 200,
+    backgroundColor: colors.card2,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  coverText: {
+    fontSize: 16,
+    color: colors.sub,
+    marginTop: 8,
+    fontWeight: '500',
+  },
+  mainInfoCard: {
+    margin: 20,
+    marginTop: 0,
+    marginBottom: 16,
+  },
+  opportunityTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.text,
+    marginBottom: 4,
+    letterSpacing: -0.5,
+  },
+  opportunityType: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 20,
+    fontWeight: '500',
+  },
+  mainInfoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  mainInfoItem: {
+    flex: 1,
+    minWidth: '45%',
+  },
+  mainInfoLabel: {
+    fontSize: 12,
+    color: colors.sub,
+    marginBottom: 4,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  mainInfoValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.2,
+  },
+  progressChartContainer: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  progressCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: colors.card2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    borderWidth: 8,
+    borderColor: colors.cardBorder,
+  },
+  progressFillCircle: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 8,
+    borderColor: colors.accent,
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
+  progressInnerCircle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  progressPercentage: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.text,
+    letterSpacing: -0.5,
+  },
+  progressLabel: {
+    fontSize: 12,
+    color: colors.sub,
+    marginTop: 2,
+    fontWeight: '500',
+  },
+  infoCard: {
+    margin: 20,
+    marginTop: 0,
+    marginBottom: 16,
+  },
+  infoCardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 16,
+    letterSpacing: -0.3,
+  },
+  statusInfo: {
+    marginTop: 16,
+  },
+  statusRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  statusLabel: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontWeight: '500',
+  },
+  statusValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  statusValueHighlight: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.accent,
+  },
+  contentText: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 20,
   },
 });
