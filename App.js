@@ -979,6 +979,264 @@ function PortfolioScreen() {
   );
 }
 
+// ---------------- Extract Screen ----------------
+function ExtractScreen() {
+  const [selectedFilter, setSelectedFilter] = useState('todos');
+  const [selectedPeriod, setSelectedPeriod] = useState('30d');
+
+  // Mock data for transactions
+  const transactions = [
+    {
+      id: '1',
+      type: 'investment',
+      title: 'Investimento - Edifício Comercial SP',
+      amount: -25000,
+      date: '2024-01-15',
+      status: 'completed',
+      category: 'Real Estate'
+    },
+    {
+      id: '2',
+      type: 'return',
+      title: 'Rendimento - Apartamento Vila Madalena',
+      amount: 1250,
+      date: '2024-01-10',
+      status: 'completed',
+      category: 'Real Estate'
+    },
+    {
+      id: '3',
+      type: 'investment',
+      title: 'Investimento - Loja Comercial RJ',
+      amount: -15000,
+      date: '2024-01-08',
+      status: 'completed',
+      category: 'Real Estate'
+    },
+    {
+      id: '4',
+      type: 'return',
+      title: 'Rendimento - Casa Residencial',
+      amount: 850,
+      date: '2024-01-05',
+      status: 'completed',
+      category: 'Real Estate'
+    },
+    {
+      id: '5',
+      type: 'fee',
+      title: 'Taxa de Administração',
+      amount: -120,
+      date: '2024-01-03',
+      status: 'completed',
+      category: 'Fee'
+    },
+    {
+      id: '6',
+      type: 'return',
+      title: 'Rendimento - Edifício Comercial SP',
+      amount: 2100,
+      date: '2024-01-01',
+      status: 'completed',
+      category: 'Real Estate'
+    }
+  ];
+
+  const filters = [
+    { key: 'todos', label: 'Todos' },
+    { key: 'investment', label: 'Investimentos' },
+    { key: 'return', label: 'Rendimentos' },
+    { key: 'fee', label: 'Taxas' }
+  ];
+
+  const periods = [
+    { key: '7d', label: '7 dias' },
+    { key: '30d', label: '30 dias' },
+    { key: '90d', label: '3 meses' },
+    { key: '1y', label: '1 ano' }
+  ];
+
+  const filteredTransactions = transactions.filter(transaction => {
+    if (selectedFilter === 'todos') return true;
+    return transaction.type === selectedFilter;
+  });
+
+  const formatCurrency = (value) => {
+    const formatted = Math.abs(value).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+    return value >= 0 ? `+ ${formatted}` : `- ${formatted}`;
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const getTransactionIcon = (type) => {
+    switch (type) {
+      case 'investment':
+        return 'arrow-up-outline';
+      case 'return':
+        return 'arrow-down-outline';
+      case 'fee':
+        return 'card-outline';
+      default:
+        return 'swap-horizontal-outline';
+    }
+  };
+
+  const getTransactionColor = (type) => {
+    switch (type) {
+      case 'investment':
+        return '#EF4444';
+      case 'return':
+        return '#10B981';
+      case 'fee':
+        return '#F59E0B';
+      default:
+        return colors.textSecondary;
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView style={styles.container}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <Text style={styles.topbarTitle}>Extrato</Text>
+          <View style={styles.topbarIcons}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="filter-outline" size={20} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Summary Card */}
+        <View style={[styles.card, styles.extractSummaryCard]}>
+          <Text style={styles.extractSummaryTitle}>Resumo do Período</Text>
+          <View style={styles.extractSummaryGrid}>
+            <View style={styles.extractSummaryItem}>
+              <Text style={styles.extractSummaryLabel}>Total Investido</Text>
+              <Text style={[styles.extractSummaryValue, { color: '#EF4444' }]}>
+                R$ 40.000,00
+              </Text>
+            </View>
+            <View style={styles.extractSummaryItem}>
+              <Text style={styles.extractSummaryLabel}>Total Recebido</Text>
+              <Text style={[styles.extractSummaryValue, { color: '#10B981' }]}>
+                R$ 4.200,00
+              </Text>
+            </View>
+          </View>
+          <View style={styles.extractSummaryDivider} />
+          <View style={styles.extractSummaryTotal}>
+            <Text style={styles.extractSummaryTotalLabel}>Saldo Líquido</Text>
+            <Text style={[styles.extractSummaryTotalValue, { color: '#10B981' }]}>
+              R$ 4.080,00
+            </Text>
+          </View>
+        </View>
+
+        {/* Period Filter */}
+        <View style={styles.periodControl}>
+          <View style={styles.segmentContainer}>
+            {periods.map((period) => (
+              <TouchableOpacity
+                key={period.key}
+                style={[
+                  styles.segmentButton,
+                  selectedPeriod === period.key && styles.segmentButtonActive
+                ]}
+                onPress={() => setSelectedPeriod(period.key)}
+              >
+                <Text style={[
+                  styles.segmentText,
+                  selectedPeriod === period.key ? styles.segmentTextActive : null
+                ]}>
+                  {period.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Transaction Type Filter */}
+        <View style={styles.filterContainer}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.filterScroll}
+          >
+            {filters.map((filter) => (
+              <TouchableOpacity
+                key={filter.key}
+                style={[
+                  styles.filterButton,
+                  selectedFilter === filter.key && styles.filterButtonActive
+                ]}
+                onPress={() => setSelectedFilter(filter.key)}
+              >
+                <Text style={[
+                  styles.filterText,
+                  selectedFilter === filter.key && styles.filterTextActive
+                ]}>
+                  {filter.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Transactions List */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Transações</Text>
+          {filteredTransactions.map((transaction, index) => (
+            <View key={transaction.id}>
+              <View style={styles.extractTransactionItem}>
+                <View style={[
+                  styles.extractTransactionIcon,
+                  { backgroundColor: `${getTransactionColor(transaction.type)}20` }
+                ]}>
+                  <Ionicons 
+                    name={getTransactionIcon(transaction.type)} 
+                    size={20} 
+                    color={getTransactionColor(transaction.type)} 
+                  />
+                </View>
+                <View style={styles.extractTransactionInfo}>
+                  <Text style={styles.extractTransactionTitle}>
+                    {transaction.title}
+                  </Text>
+                  <Text style={styles.extractTransactionDate}>
+                    {formatDate(transaction.date)}
+                  </Text>
+                </View>
+                <View style={styles.extractTransactionAmount}>
+                  <Text style={[
+                    styles.extractTransactionValue,
+                    { color: getTransactionColor(transaction.type) }
+                  ]}>
+                    {formatCurrency(transaction.amount)}
+                  </Text>
+                </View>
+              </View>
+              {index < filteredTransactions.length - 1 && (
+                <View style={styles.extractTransactionDivider} />
+              )}
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 // ---------------- Placeholders for other tabs ----------------
 function PlaceholderScreen({ title }) {
   return (
@@ -1063,11 +1321,11 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Conteúdos"
-          children={() => <PlaceholderScreen title="Conteúdos" />}
+          name="Extrato"
+          component={ExtractScreen}
           options={{
             tabBarIcon: ({ color }) => (
-              <Ionicons name="library-outline" color={color} size={24} />
+              <Ionicons name="receipt-outline" color={color} size={24} />
             ),
           }}
         />
@@ -1961,5 +2219,100 @@ const styles = StyleSheet.create({
   },
   documentDownloadIcon: {
     padding: 4,
+  },
+
+  // Extract Screen Styles
+  extractSummaryCard: {
+    marginBottom: 16,
+  },
+  extractSummaryTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 16,
+    letterSpacing: -0.3,
+  },
+  extractSummaryGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  extractSummaryItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  extractSummaryLabel: {
+    fontSize: 12,
+    color: colors.sub,
+    marginBottom: 4,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  extractSummaryValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: -0.3,
+  },
+  extractSummaryDivider: {
+    height: 1,
+    backgroundColor: colors.cardBorder,
+    marginBottom: 16,
+  },
+  extractSummaryTotal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  extractSummaryTotalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  extractSummaryTotalValue: {
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.4,
+  },
+  extractTransactionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  extractTransactionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  extractTransactionInfo: {
+    flex: 1,
+  },
+  extractTransactionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 4,
+    letterSpacing: -0.2,
+  },
+  extractTransactionDate: {
+    fontSize: 12,
+    color: colors.sub,
+    fontWeight: '500',
+  },
+  extractTransactionAmount: {
+    alignItems: 'flex-end',
+  },
+  extractTransactionValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.3,
+  },
+  extractTransactionDivider: {
+    height: 1,
+    backgroundColor: colors.cardBorder,
+    marginLeft: 52,
   },
 });
