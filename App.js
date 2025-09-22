@@ -1238,11 +1238,140 @@ function ExtractScreen() {
 }
 
 // ---------------- Placeholders for other tabs ----------------
-function PlaceholderScreen({ title }) {
+function ProfileScreen() {
+  const [showBalance, setShowBalance] = useState(true);
+
   return (
-    <SafeAreaView style={[styles.safe, { justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={[styles.text, { opacity: 0.9 }]}>{title}</Text>
-      <Text style={[styles.sub, { marginTop: 8 }]}>Em breve</Text>
+    <SafeAreaView style={styles.safe}>
+      <ScrollView style={styles.container}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <Text style={styles.topbarTitle}>Perfil</Text>
+          <View style={styles.topbarIcons}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="settings-outline" size={20} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Profile Card */}
+        <View style={[styles.card, styles.profileCard]}>
+          <View style={styles.profileHeader}>
+            <LinearGradient
+              colors={[colors.accent, colors.accent2]}
+              style={styles.profileAvatarRing}
+            >
+              <View style={styles.profileAvatar}>
+                <Text style={styles.profileAvatarText}>JL</Text>
+              </View>
+            </LinearGradient>
+            <View style={styles.profileInfo}>
+              <Text style={styles.profileName}>João Leismann</Text>
+              <Text style={styles.profileEmail}>joao@example.com</Text>
+              <View style={styles.profileBadge}>
+                <Text style={styles.profileBadgeText}>Investidor Premium</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Balance Card */}
+        <View style={[styles.card, styles.balanceCard]}>
+          <View style={styles.balanceHeader}>
+            <Text style={styles.balanceTitle}>Saldo Total</Text>
+            <TouchableOpacity 
+              style={styles.eyeButton}
+              onPress={() => setShowBalance(!showBalance)}
+            >
+              <Ionicons 
+                name={showBalance ? "eye-outline" : "eye-off-outline"} 
+                size={18} 
+                color={colors.text} 
+              />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.balanceValue}>
+            {showBalance ? "R$ 127.450,00" : "R$ ••••••"}
+          </Text>
+          <Text style={styles.balanceSubtitle}>
+            Rendimento total: <Text style={styles.balanceProfit}>+R$ 12.450,00</Text>
+          </Text>
+        </View>
+
+        {/* Quick Actions */}
+        <View style={[styles.card, styles.actionsCard]}>
+          <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+          <View style={styles.actionsGrid}>
+            <TouchableOpacity style={styles.actionButton}>
+              <View style={[styles.actionIcon, { backgroundColor: colors.accentLight }]}>
+                <Ionicons name="add-outline" size={24} color={colors.accent} />
+              </View>
+              <Text style={styles.actionText}>Investir</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton}>
+              <View style={[styles.actionIcon, { backgroundColor: '#dcfce7' }]}>
+                <Ionicons name="arrow-down-outline" size={24} color="#16a34a" />
+              </View>
+              <Text style={styles.actionText}>Depositar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton}>
+              <View style={[styles.actionIcon, { backgroundColor: '#fef3c7' }]}>
+                <Ionicons name="arrow-up-outline" size={24} color="#d97706" />
+              </View>
+              <Text style={styles.actionText}>Sacar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton}>
+              <View style={[styles.actionIcon, { backgroundColor: '#e0e7ff' }]}>
+                <Ionicons name="document-text-outline" size={24} color="#4f46e5" />
+              </View>
+              <Text style={styles.actionText}>Extrato</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Account Info */}
+        <View style={[styles.card, styles.accountCard]}>
+          <Text style={styles.sectionTitle}>Informações da Conta</Text>
+          <View style={styles.accountInfo}>
+            <View style={styles.accountItem}>
+              <Text style={styles.accountLabel}>CPF</Text>
+              <Text style={styles.accountValue}>123.456.789-00</Text>
+            </View>
+            <View style={styles.accountItem}>
+              <Text style={styles.accountLabel}>Telefone</Text>
+              <Text style={styles.accountValue}>(11) 99999-9999</Text>
+            </View>
+            <View style={styles.accountItem}>
+              <Text style={styles.accountLabel}>Data de Nascimento</Text>
+              <Text style={styles.accountValue}>15/03/1990</Text>
+            </View>
+            <View style={styles.accountItem}>
+              <Text style={styles.accountLabel}>Membro desde</Text>
+              <Text style={styles.accountValue}>Janeiro 2023</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Support */}
+        <View style={[styles.card, styles.supportCard]}>
+          <Text style={styles.sectionTitle}>Suporte</Text>
+          <TouchableOpacity style={styles.supportItem}>
+            <Ionicons name="help-circle-outline" size={24} color={colors.accent} />
+            <Text style={styles.supportText}>Central de Ajuda</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.supportItem}>
+            <Ionicons name="chatbubble-outline" size={24} color={colors.accent} />
+            <Text style={styles.supportText}>Falar com Suporte</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.supportItem}>
+            <Ionicons name="star-outline" size={24} color={colors.accent} />
+            <Text style={styles.supportText}>Avaliar App</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -1266,21 +1395,28 @@ export default function App() {
         initialRouteName="Carteira"
         screenOptions={{
           headerShown: false,
-          tabBarLabelStyle: { fontSize: 11, marginBottom: 4, fontWeight: '500' },
-          tabBarActiveTintColor: colors.text,
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.sub,
           tabBarStyle: {
-            height: 72,
-            paddingBottom: 8,
-            paddingTop: 8,
-            borderTopColor: colors.border,
-            borderTopWidth: 1,
-            backgroundColor: colors.card,
+            height: 80,
+            paddingBottom: 20,
+            paddingTop: 16,
+            paddingHorizontal: 20,
+            borderTopWidth: 0,
+            backgroundColor: 'rgba(248, 250, 252, 0.98)',
+            backdropFilter: 'blur(40px)',
             shadowColor: colors.shadow,
-            shadowOpacity: 0.1,
-            shadowRadius: 20,
-            shadowOffset: { width: 0, height: -5 },
-            elevation: 10,
+            shadowOpacity: 0.08,
+            shadowRadius: 24,
+            shadowOffset: { width: 0, height: -4 },
+            elevation: 12,
+            borderTopLeftRadius: 32,
+            borderTopRightRadius: 32,
+            position: 'absolute',
+            overflow: 'visible',
+            borderWidth: 1,
+            borderColor: 'rgba(226, 232, 240, 0.6)',
           },
         }}
       >
@@ -1288,8 +1424,17 @@ export default function App() {
           name="Carteira"
           component={WalletScreen}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="wallet-outline" color={color} size={24} />
+            tabBarIcon: ({ color, focused }) => (
+              <View style={styles.modernTabContainer}>
+                <View style={[styles.modernIconWrapper, focused && styles.modernIconWrapperActive]}>
+                  <Ionicons 
+                    name={focused ? "wallet" : "wallet-outline"} 
+                    color={focused ? '#FFFFFF' : color} 
+                    size={22} 
+                  />
+                </View>
+                {focused && <View style={styles.modernActiveIndicator} />}
+              </View>
             ),
           }}
         />
@@ -1297,8 +1442,17 @@ export default function App() {
           name="Portfolio"
           component={PortfolioScreen}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="grid-outline" color={color} size={24} />
+            tabBarIcon: ({ color, focused }) => (
+              <View style={styles.modernTabContainer}>
+                <View style={[styles.modernIconWrapper, focused && styles.modernIconWrapperActive]}>
+                  <Ionicons 
+                    name={focused ? "grid" : "grid-outline"} 
+                    color={focused ? '#FFFFFF' : color} 
+                    size={22} 
+                  />
+                </View>
+                {focused && <View style={styles.modernActiveIndicator} />}
+              </View>
             ),
           }}
         />
@@ -1308,14 +1462,34 @@ export default function App() {
           options={{
             tabBarLabel: 'Investir',
             tabBarIcon: ({ focused }) => (
-              <LinearGradient 
-                colors={[colors.accent, colors.accent2]} 
-                start={{ x: 0, y: 0 }} 
-                end={{ x: 1, y: 1 }} 
-                style={[styles.fabTab, { transform: [{ translateY: focused ? -4 : -12 }] }]}
-              >
-                <Ionicons name="add" size={28} color="#FFFFFF" />
-              </LinearGradient>
+              <View style={styles.modernFabWrapper}>
+                <LinearGradient 
+                  colors={focused ? ['#0EA5E9', '#0284C7', '#0369A1'] : ['#3B82F6', '#2563EB']} 
+                  start={{ x: 0, y: 0 }} 
+                  end={{ x: 1, y: 1 }} 
+                  style={[
+                    styles.modernFabButton, 
+                    { 
+                      transform: [
+                        { translateY: focused ? -14 : -10 },
+                        { scale: focused ? 1.2 : 1.0 }
+                      ] 
+                    }
+                  ]}
+                >
+                  <Ionicons 
+                    name="add" 
+                    size={focused ? 30 : 26} 
+                    color="#FFFFFF" 
+                  />
+                  {focused && (
+                    <>
+                      <View style={styles.modernFabGlow} />
+                      <View style={styles.modernFabPulse} />
+                    </>
+                  )}
+                </LinearGradient>
+              </View>
             ),
             tabBarItemStyle: { paddingTop: 0 },
           }}
@@ -1324,17 +1498,35 @@ export default function App() {
           name="Extrato"
           component={ExtractScreen}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="receipt-outline" color={color} size={24} />
+            tabBarIcon: ({ color, focused }) => (
+              <View style={styles.modernTabContainer}>
+                <View style={[styles.modernIconWrapper, focused && styles.modernIconWrapperActive]}>
+                  <Ionicons 
+                    name={focused ? "receipt" : "receipt-outline"} 
+                    color={focused ? '#FFFFFF' : color} 
+                    size={22} 
+                  />
+                </View>
+                {focused && <View style={styles.modernActiveIndicator} />}
+              </View>
             ),
           }}
         />
         <Tab.Screen
           name="Perfil"
-          children={() => <PlaceholderScreen title="Perfil" />}
+          component={ProfileScreen}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="person-circle-outline" color={color} size={24} />
+            tabBarIcon: ({ color, focused }) => (
+              <View style={styles.modernTabContainer}>
+                <View style={[styles.modernIconWrapper, focused && styles.modernIconWrapperActive]}>
+                  <Ionicons 
+                    name={focused ? "person-circle" : "person-circle-outline"} 
+                    color={focused ? '#FFFFFF' : color} 
+                    size={22} 
+                  />
+                </View>
+                {focused && <View style={styles.modernActiveIndicator} />}
+              </View>
             ),
           }}
         />
@@ -1651,6 +1843,80 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     elevation: 8,
+    position: 'relative',
+  },
+  // Modern Tab Navigation Styles
+  modernTabContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+  },
+  modernIconWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    transition: 'all 0.3s ease',
+  },
+  modernIconWrapperActive: {
+    backgroundColor: 'rgba(59, 130, 246, 0.15)',
+    transform: [{ scale: 1.1 }],
+    shadowColor: '#3B82F6',
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
+  },
+  modernActiveIndicator: {
+    position: 'absolute',
+    bottom: -12,
+    width: 24,
+    height: 3,
+    backgroundColor: '#3B82F6',
+    borderRadius: 2,
+    shadowColor: '#3B82F6',
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  modernFabWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+  },
+  modernFabButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#3B82F6',
+    shadowOpacity: 0.35,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 12,
+    position: 'relative',
+  },
+  modernFabGlow: {
+    position: 'absolute',
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    backgroundColor: '#3B82F6',
+    opacity: 0.15,
+    zIndex: -1,
+  },
+  modernFabPulse: {
+    position: 'absolute',
+    width: 104,
+    height: 104,
+    borderRadius: 52,
+    backgroundColor: '#3B82F6',
+    opacity: 0.08,
+    zIndex: -2,
   },
 
   // Investment specific styles
@@ -2314,5 +2580,160 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.cardBorder,
     marginLeft: 52,
+  },
+  
+  // Profile Screen Styles
+  profileCard: {
+    marginBottom: 16,
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileAvatarRing: {
+    padding: 4,
+    borderRadius: 36,
+    marginRight: 16,
+  },
+  profileAvatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.card,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileAvatarText: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.accent,
+    letterSpacing: -0.5,
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 4,
+    letterSpacing: -0.3,
+  },
+  profileEmail: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 8,
+  },
+  profileBadge: {
+    backgroundColor: colors.accentLight,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+  },
+  profileBadgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.accent,
+  },
+  
+  balanceCard: {
+    marginBottom: 16,
+  },
+  balanceHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  balanceTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textSecondary,
+  },
+  balanceValue: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.text,
+    marginBottom: 4,
+    letterSpacing: -0.8,
+  },
+  balanceSubtitle: {
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+  balanceProfit: {
+    color: '#10B981',
+    fontWeight: '600',
+  },
+  
+  actionsCard: {
+    marginBottom: 16,
+  },
+  actionsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  actionButton: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  actionIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  actionText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  
+  accountCard: {
+    marginBottom: 16,
+  },
+  accountInfo: {
+    marginTop: 16,
+  },
+  accountItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  accountLabel: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontWeight: '500',
+  },
+  accountValue: {
+    fontSize: 14,
+    color: colors.text,
+    fontWeight: '600',
+  },
+  
+  supportCard: {
+    marginBottom: 32,
+  },
+  supportItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  supportText: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: '500',
+    marginLeft: 12,
   },
 });
