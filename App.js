@@ -1650,7 +1650,7 @@ function InvestScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.scrollViewWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Investir</Text>
