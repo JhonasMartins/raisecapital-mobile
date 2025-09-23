@@ -1591,17 +1591,13 @@ function PortfolioScreen() {
 
     return (
       <View style={[styles.card, styles.investmentCard]}>
-        <View style={styles.investmentHeader}>
-          <View style={styles.investmentInfo}>
-            <Text style={styles.investmentName}>{investment.nome}</Text>
-            <View style={styles.investmentTypeContainer}>
-              <Text style={styles.investmentType}>{investment.tipo}</Text>
-              <View style={[styles.statusBadge, statusStyle.badge]}>
-                <Text style={[styles.statusText, statusStyle.text]}>
-                  {statusStyle.label}
-                </Text>
-              </View>
-            </View>
+        <Text style={styles.investmentName}>{investment.nome}</Text>
+        <View style={styles.investmentTypeContainer}>
+          <Text style={styles.investmentType}>{investment.tipo}</Text>
+          <View style={[styles.statusBadge, statusStyle.badge]}>
+            <Text style={[styles.statusText, statusStyle.text]}>
+              {statusStyle.label}
+            </Text>
           </View>
         </View>
 
