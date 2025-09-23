@@ -798,6 +798,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -1213,8 +1214,24 @@ function InvestScreen({ navigation }) {
     }
   };
 
+  const getInvestmentCoverImage = (categoria) => {
+    switch (categoria) {
+      case 'CRI': return require('./assets/cri-cover.svg');
+      case 'Agronegócio': return require('./assets/agronegocio-cover.svg');
+      case 'Energia': return require('./assets/energia-cover.svg');
+      default: return require('./assets/default-cover.svg');
+    }
+  };
+
   const renderOportunidadeCard = (item) => (
     <View key={item.id} style={[styles.card, styles.investmentCard]}>
+      <View style={styles.investmentCoverContainer}>
+        <Image 
+          source={getInvestmentCoverImage(item.categoria)} 
+          style={styles.investmentCover}
+          resizeMode="cover"
+        />
+      </View>
       <Text style={styles.investmentName}>{item.nome}</Text>
       <View style={styles.investmentTypeContainer}>
         <Text style={styles.investmentType}>{item.categoria}</Text>
@@ -1571,6 +1588,69 @@ function PortfolioScreen() {
     }).format(value);
   };
 
+  const getInvestmentCoverImage = (tipo) => {
+    const coverStyle = {
+      width: '100%',
+      height: 120,
+      borderRadius: 12,
+      marginBottom: 16,
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+
+    switch (tipo?.toLowerCase()) {
+      case 'cri':
+        return (
+          <LinearGradient
+            colors={['#3B82F6', '#1E40AF']}
+            style={coverStyle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Ionicons name="business-outline" size={32} color="#FFFFFF" />
+            <Text style={styles.coverText}>CRI</Text>
+          </LinearGradient>
+        );
+      case 'agronegócio':
+      case 'agronegocio':
+        return (
+          <LinearGradient
+            colors={['#10B981', '#059669']}
+            style={coverStyle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Ionicons name="leaf-outline" size={32} color="#FFFFFF" />
+            <Text style={styles.coverText}>Agronegócio</Text>
+          </LinearGradient>
+        );
+      case 'energia':
+        return (
+          <LinearGradient
+            colors={['#F59E0B', '#D97706']}
+            style={coverStyle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Ionicons name="flash-outline" size={32} color="#FFFFFF" />
+            <Text style={styles.coverText}>Energia</Text>
+          </LinearGradient>
+        );
+      default:
+        return (
+          <LinearGradient
+            colors={['#8B5CF6', '#7C3AED']}
+            style={coverStyle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Ionicons name="trending-up-outline" size={32} color="#FFFFFF" />
+            <Text style={styles.coverText}>Investimento</Text>
+          </LinearGradient>
+        );
+    }
+  };
+
   const InvestmentCard = ({ investment }) => {
     const getStatusStyle = (status) => {
       switch (status) {
@@ -1591,6 +1671,7 @@ function PortfolioScreen() {
 
     return (
       <View style={[styles.card, styles.investmentCard]}>
+        {getInvestmentCoverImage(investment.tipo)}
         <Text style={styles.investmentName}>{investment.nome}</Text>
         <View style={styles.investmentTypeContainer}>
           <Text style={styles.investmentType}>{investment.tipo}</Text>
