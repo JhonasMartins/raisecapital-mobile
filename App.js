@@ -2476,6 +2476,9 @@ const styles = StyleSheet.create({
     paddingBottom: 47, // 32 + 15px extra space for navbar
     gap: 16,
   },
+  scrollContent: {
+    paddingBottom: 115, // 100 + 15px extra space for navbar
+  },
   text: { color: colors.text, fontSize: 16 },
   sub: { color: colors.sub, fontSize: 13 },
 
