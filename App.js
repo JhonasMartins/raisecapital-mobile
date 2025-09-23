@@ -479,7 +479,7 @@ function PixKeyScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.containerWithNavbar}>
+      <ScrollView style={styles.scrollViewWithNavbar}>
         <View style={styles.card}>
           <Text style={styles.investmentTitle}>Informe sua chave PIX</Text>
           <Text style={styles.investmentSubtitle}>
@@ -584,7 +584,7 @@ function InvestorProfileScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.containerWithNavbar}>
+      <ScrollView style={styles.scrollViewWithNavbar}>
         <View style={styles.card}>
           <Text style={styles.investmentTitle}>Declaração e Perfil de Investidor</Text>
           <Text style={styles.investmentSubtitle}>
@@ -1650,7 +1650,7 @@ function InvestScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
-      <ScrollView style={styles.scrollViewWithNavbar}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Investir</Text>
@@ -2331,7 +2331,7 @@ function ExtractScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.containerWithNavbar}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Extrato</Text>
@@ -2468,7 +2468,7 @@ function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.containerWithNavbar}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Perfil</Text>
@@ -2794,7 +2794,10 @@ const styles = StyleSheet.create({
   },
   // Estilos padrão para ScrollViews com espaçamento do navbar
   scrollViewWithNavbar: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
     paddingBottom: 115, // 100 + 15px extra space for navbar
+    gap: 16,
   },
   containerWithNavbar: {
     paddingHorizontal: 20,
