@@ -2455,6 +2455,11 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  // NAVBAR SPACING PATTERN - Use these styles for consistent navbar spacing
+  // For ScrollViews: use scrollViewWithNavbar or scrollContent
+  // For containers: use containerWithNavbar
+  // All styles include 15px extra space for bottom navbar
+  
   safe: {
     flex: 1,
     backgroundColor: colors.bg,
