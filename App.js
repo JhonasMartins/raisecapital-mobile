@@ -1,4 +1,758 @@
 import React, { useMemo, useState } from 'react';
+
+// Páginas do Processo de Investimento
+function InvestmentAmountScreen({ navigation }) {
+  const [amount, setAmount] = useState('');
+
+  const formatCurrency = (value) => {
+    const numericValue = value.replace(/[^\d]/g, '');
+    const formattedValue = (numericValue / 100).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+    return formattedValue;
+  };
+
+  const handleAmountChange = (text) => {
+    const formatted = formatCurrency(text);
+    setAmount(formatted);
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.investmentHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.investmentHeaderTitle}>Valor do Investimento</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.investmentTitle}>Quanto você deseja investir?</Text>
+          <Text style={styles.investmentSubtitle}>
+            Defina o valor que você gostaria de investir nesta oportunidade
+          </Text>
+
+          <View style={styles.amountInputContainer}>
+            <TextInput
+              style={styles.amountInput}
+              value={amount}
+              onChangeText={handleAmountChange}
+              placeholder="R$ 0,00"
+              keyboardType="numeric"
+              placeholderTextColor={colors.sub}
+            />
+          </View>
+
+          <View style={styles.suggestedAmounts}>
+            <Text style={styles.suggestedTitle}>Valores sugeridos:</Text>
+            <View style={styles.suggestedGrid}>
+              {['1000', '5000', '10000', '25000'].map((value) => (
+                <TouchableOpacity
+                  key={value}
+                  style={styles.suggestedButton}
+                  onPress={() => setAmount(formatCurrency(value + '00'))}
+                >
+                  <Text style={styles.suggestedButtonText}>
+                    {formatCurrency(value + '00')}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.continueButton, !amount && styles.continueButtonDisabled]}
+          onPress={() => amount && navigation.navigate('PersonalData')}
+          disabled={!amount}
+        >
+          <Text style={styles.continueButtonText}>Avançar</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function PersonalDataScreen({ navigation }) {
+  const [formData, setFormData] = useState({
+    nome: '',
+    sobrenome: '',
+    dataNascimento: '',
+    genero: '',
+    cpf: '',
+    rg: '',
+    orgaoExpeditor: '',
+    uf: '',
+    estadoCivil: '',
+    telefone: '',
+    endereco: '',
+    empresa: '',
+    cargo: '',
+    profissao: ''
+  });
+
+  const updateField = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const isFormValid = () => {
+    return Object.values(formData).every(value => value.trim() !== '');
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.investmentHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.investmentHeaderTitle}>Dados Pessoais</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.investmentTitle}>Confirme seus dados pessoais</Text>
+          <Text style={styles.investmentSubtitle}>
+            Verifique e complete as informações necessárias
+          </Text>
+
+          <View style={styles.formContainer}>
+            <View style={styles.formRow}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Nome</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.nome}
+                  onChangeText={(text) => updateField('nome', text)}
+                  placeholder="Seu nome"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Sobrenome</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.sobrenome}
+                  onChangeText={(text) => updateField('sobrenome', text)}
+                  placeholder="Seu sobrenome"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+            </View>
+
+            <View style={styles.formRow}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Data de Nascimento</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.dataNascimento}
+                  onChangeText={(text) => updateField('dataNascimento', text)}
+                  placeholder="DD/MM/AAAA"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Gênero</Text>
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={formData.genero}
+                    onValueChange={(value) => updateField('genero', value)}
+                    style={styles.picker}
+                  >
+                    <Picker.Item label="Selecione" value="" />
+                    <Picker.Item label="Masculino" value="masculino" />
+                    <Picker.Item label="Feminino" value="feminino" />
+                    <Picker.Item label="Outro" value="outro" />
+                  </Picker>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.formRow}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>CPF</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.cpf}
+                  onChangeText={(text) => updateField('cpf', text)}
+                  placeholder="000.000.000-00"
+                  placeholderTextColor={colors.sub}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>RG</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.rg}
+                  onChangeText={(text) => updateField('rg', text)}
+                  placeholder="00.000.000-0"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+            </View>
+
+            <View style={styles.formRow}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Órgão Expeditor</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.orgaoExpeditor}
+                  onChangeText={(text) => updateField('orgaoExpeditor', text)}
+                  placeholder="SSP"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>UF</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.uf}
+                  onChangeText={(text) => updateField('uf', text)}
+                  placeholder="SP"
+                  placeholderTextColor={colors.sub}
+                  maxLength={2}
+                />
+              </View>
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Estado Civil</Text>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={formData.estadoCivil}
+                  onValueChange={(value) => updateField('estadoCivil', value)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione" value="" />
+                  <Picker.Item label="Solteiro(a)" value="solteiro" />
+                  <Picker.Item label="Casado(a)" value="casado" />
+                  <Picker.Item label="Divorciado(a)" value="divorciado" />
+                  <Picker.Item label="Viúvo(a)" value="viuvo" />
+                </Picker>
+              </View>
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Telefone</Text>
+              <TextInput
+                style={styles.formInput}
+                value={formData.telefone}
+                onChangeText={(text) => updateField('telefone', text)}
+                placeholder="(11) 99999-9999"
+                placeholderTextColor={colors.sub}
+                keyboardType="phone-pad"
+              />
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Endereço Completo</Text>
+              <TextInput
+                style={[styles.formInput, styles.textArea]}
+                value={formData.endereco}
+                onChangeText={(text) => updateField('endereco', text)}
+                placeholder="Rua, número, bairro, cidade, CEP"
+                placeholderTextColor={colors.sub}
+                multiline
+                numberOfLines={3}
+              />
+            </View>
+
+            <View style={styles.formRow}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Empresa</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.empresa}
+                  onChangeText={(text) => updateField('empresa', text)}
+                  placeholder="Nome da empresa"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Cargo</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={formData.cargo}
+                  onChangeText={(text) => updateField('cargo', text)}
+                  placeholder="Seu cargo"
+                  placeholderTextColor={colors.sub}
+                />
+              </View>
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Profissão</Text>
+              <TextInput
+                style={styles.formInput}
+                value={formData.profissao}
+                onChangeText={(text) => updateField('profissao', text)}
+                placeholder="Sua profissão"
+                placeholderTextColor={colors.sub}
+              />
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.continueButton, !isFormValid() && styles.continueButtonDisabled]}
+          onPress={() => isFormValid() && navigation.navigate('BankData')}
+          disabled={!isFormValid()}
+        >
+          <Text style={styles.continueButtonText}>Avançar</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function BankDataScreen({ navigation }) {
+  const [bankData, setBankData] = useState({
+    banco: '',
+    agencia: '',
+    conta: '',
+    digito: ''
+  });
+
+  const updateField = (field, value) => {
+    setBankData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const isFormValid = () => {
+    return Object.values(bankData).every(value => value.trim() !== '');
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.investmentHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.investmentHeaderTitle}>Dados Bancários</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.investmentTitle}>Confirme seus dados bancários</Text>
+          <Text style={styles.investmentSubtitle}>
+            Essas informações são necessárias para processar seu investimento
+          </Text>
+
+          <View style={styles.formContainer}>
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Banco</Text>
+              <TextInput
+                style={styles.formInput}
+                value={bankData.banco}
+                onChangeText={(text) => updateField('banco', text)}
+                placeholder="Nome do banco"
+                placeholderTextColor={colors.sub}
+              />
+            </View>
+
+            <View style={styles.formRow}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Agência</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={bankData.agencia}
+                  onChangeText={(text) => updateField('agencia', text)}
+                  placeholder="0000"
+                  placeholderTextColor={colors.sub}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Conta</Text>
+                <TextInput
+                  style={styles.formInput}
+                  value={bankData.conta}
+                  onChangeText={(text) => updateField('conta', text)}
+                  placeholder="00000-0"
+                  placeholderTextColor={colors.sub}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Dígito</Text>
+              <TextInput
+                style={styles.formInput}
+                value={bankData.digito}
+                onChangeText={(text) => updateField('digito', text)}
+                placeholder="0"
+                placeholderTextColor={colors.sub}
+                keyboardType="numeric"
+                maxLength={1}
+              />
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.continueButton, !isFormValid() && styles.continueButtonDisabled]}
+          onPress={() => isFormValid() && navigation.navigate('PixKey')}
+          disabled={!isFormValid()}
+        >
+          <Text style={styles.continueButtonText}>Avançar</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function PixKeyScreen({ navigation }) {
+  const [pixData, setPixData] = useState({
+    tipoChave: '',
+    chave: ''
+  });
+
+  const updateField = (field, value) => {
+    setPixData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const isFormValid = () => {
+    return pixData.tipoChave !== '' && pixData.chave.trim() !== '';
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.investmentHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.investmentHeaderTitle}>Chave PIX</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.investmentTitle}>Informe sua chave PIX</Text>
+          <Text style={styles.investmentSubtitle}>
+            Sua chave PIX será utilizada para eventuais reembolsos
+          </Text>
+
+          <View style={styles.formContainer}>
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Tipo de Chave</Text>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={pixData.tipoChave}
+                  onValueChange={(value) => updateField('tipoChave', value)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione o tipo de chave" value="" />
+                  <Picker.Item label="CPF" value="cpf" />
+                  <Picker.Item label="E-mail" value="email" />
+                  <Picker.Item label="Telefone" value="telefone" />
+                  <Picker.Item label="Chave Aleatória" value="aleatoria" />
+                </Picker>
+              </View>
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Chave PIX</Text>
+              <TextInput
+                style={styles.formInput}
+                value={pixData.chave}
+                onChangeText={(text) => updateField('chave', text)}
+                placeholder={
+                  pixData.tipoChave === 'cpf' ? '000.000.000-00' :
+                  pixData.tipoChave === 'email' ? 'seu@email.com' :
+                  pixData.tipoChave === 'telefone' ? '(11) 99999-9999' :
+                  pixData.tipoChave === 'aleatoria' ? 'Chave aleatória' :
+                  'Digite sua chave PIX'
+                }
+                placeholderTextColor={colors.sub}
+                keyboardType={
+                  pixData.tipoChave === 'cpf' || pixData.tipoChave === 'telefone' ? 'numeric' :
+                  pixData.tipoChave === 'email' ? 'email-address' : 'default'
+                }
+              />
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.continueButton, !isFormValid() && styles.continueButtonDisabled]}
+          onPress={() => isFormValid() && navigation.navigate('InvestorProfile')}
+          disabled={!isFormValid()}
+        >
+          <Text style={styles.continueButtonText}>Avançar</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function InvestorProfileScreen({ navigation }) {
+  const [profileData, setProfileData] = useState({
+    totalInvestido: '',
+    perfilInvestidor: '',
+    aceitaTermos: false
+  });
+
+  const updateField = (field, value) => {
+    setProfileData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const isFormValid = () => {
+    return profileData.totalInvestido.trim() !== '' && 
+           profileData.perfilInvestidor !== '' && 
+           profileData.aceitaTermos;
+  };
+
+  const formatCurrency = (value) => {
+    const numericValue = value.replace(/[^\d]/g, '');
+    const formattedValue = (numericValue / 100).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+    return formattedValue;
+  };
+
+  const handleAmountChange = (text) => {
+    const formatted = formatCurrency(text);
+    updateField('totalInvestido', formatted);
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.investmentHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.investmentHeaderTitle}>Perfil de Investidor</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.investmentTitle}>Declaração e Perfil de Investidor</Text>
+          <Text style={styles.investmentSubtitle}>
+            Complete as informações sobre seu perfil de investimento
+          </Text>
+
+          <View style={styles.formContainer}>
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Total investido em outras plataformas</Text>
+              <TextInput
+                style={styles.formInput}
+                value={profileData.totalInvestido}
+                onChangeText={handleAmountChange}
+                placeholder="R$ 0,00"
+                placeholderTextColor={colors.sub}
+                keyboardType="numeric"
+              />
+            </View>
+
+            <View style={styles.formFieldFull}>
+              <Text style={styles.formLabel}>Auto-declaração de perfil de investidor</Text>
+              <Text style={styles.formSubLabel}>Escolha uma das opções:</Text>
+              
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => updateField('perfilInvestidor', 'opcao1')}
+                >
+                  <View style={[styles.radioCircle, profileData.perfilInvestidor === 'opcao1' && styles.radioCircleSelected]}>
+                    {profileData.perfilInvestidor === 'opcao1' && <View style={styles.radioInner} />}
+                  </View>
+                  <Text style={styles.radioText}>
+                    Possuo investimentos financeiros em valor superior a R$ 1 milhão
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => updateField('perfilInvestidor', 'opcao2')}
+                >
+                  <View style={[styles.radioCircle, profileData.perfilInvestidor === 'opcao2' && styles.radioCircleSelected]}>
+                    {profileData.perfilInvestidor === 'opcao2' && <View style={styles.radioInner} />}
+                  </View>
+                  <Text style={styles.radioText}>
+                    Possuo investimentos financeiros ou renda bruta anual em valor superior a R$ 200 mil
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => updateField('perfilInvestidor', 'opcao3')}
+                >
+                  <View style={[styles.radioCircle, profileData.perfilInvestidor === 'opcao3' && styles.radioCircleSelected]}>
+                    {profileData.perfilInvestidor === 'opcao3' && <View style={styles.radioInner} />}
+                  </View>
+                  <Text style={styles.radioText}>
+                    Não possuo investimentos financeiros ou renda bruta anual em valor superior a R$ 200 mil
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.termsContainer}>
+              <Text style={styles.termsTitle}>Termo de Ciência de Risco</Text>
+              <ScrollView style={styles.termsScroll}>
+                <Text style={styles.termsText}>
+                  Eu, <Text style={styles.termsHighlight}>Nome do usuário</Text>, declaro estar ciente dos riscos advindos do investimento que estou realizando, inclusive:
+                  {'\n\n'}
+                  a) da possibilidade de perda da totalidade do capital investido em decorrência do insucesso da Emissora, na condição de sociedade empresária de pequeno porte;
+                  {'\n\n'}
+                  b) quando aplicável, do risco advindo da aquisição ou da conversão dos valores mobiliários de que é titular em participação em na Emissora, na condição de sociedade empresária de pequeno porte, que, dependendo do tipo societário adotado, pode acarretar riscos ao seu patrimônio pessoal em razão de sua responsabilidade patrimonial limitada não ser reconhecida em decisões judiciais nas esferas trabalhistas, previdenciária e tributária, entre outras;
+                  {'\n\n'}
+                  c) dos riscos associados à detenção de posição minoritária na Emissora, na condição de sociedade empresária de pequeno porte, considerando a influência que os seus controladores possam vir a exercer em eventos corporativos como a emissão adicional de valores mobiliários, alienação do controle ou de ativos, e transações com partes relacionadas;
+                  {'\n\n'}
+                  d) do risco de crédito da Emissora, na condição de sociedade empresária de pequeno porte, quando da emissão de títulos representativos de dívida;
+                  {'\n\n'}
+                  e) do risco associado às dificuldades que possa enfrentar para vender valores mobiliários da Emissora, na condição de sociedade empresária de pequeno porte, não registrada na CVM e que não são admitidos à negociação em mercados regulamentados;
+                  {'\n\n'}
+                  f) de que da Emissora, na condição de sociedade empresária de pequeno porte, não é registrada na CVM e que pode não haver prestação de informações contínuas pela Emissora após a realização da oferta; e
+                  {'\n\n'}
+                  g) de que não existe obrigação, definida em lei ou regulamentação, da sociedade empresária de pequeno porte, como é o caso da Emissora, que não seja constituída como sociedade anônima em transformar-se neste tipo de sociedade.
+                  {'\n\n'}
+                  Também declaro que li e estou ciente dos Fatores de Risco disponibilizados na página do projeto no site da Raise Capital.
+                </Text>
+              </ScrollView>
+
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => updateField('aceitaTermos', !profileData.aceitaTermos)}
+              >
+                <View style={[styles.checkbox, profileData.aceitaTermos && styles.checkboxChecked]}>
+                  {profileData.aceitaTermos && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+                </View>
+                <Text style={styles.checkboxText}>
+                  Concordo com os termos de ciência de risco
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.continueButton, !isFormValid() && styles.continueButtonDisabled]}
+          onPress={() => isFormValid() && navigation.navigate('InvestmentConfirmation')}
+          disabled={!isFormValid()}
+        >
+          <Text style={styles.continueButtonText}>Avançar</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function InvestmentConfirmationScreen({ navigation }) {
+  const [paymentLink] = useState('https://pay.example.com/investment-123456');
+
+  const copyToClipboard = () => {
+    // Em um app real, você usaria Clipboard.setString(paymentLink)
+    Alert.alert('Link copiado!', 'O link de pagamento foi copiado para a área de transferência.');
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.investmentHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.investmentHeaderTitle}>Confirmação</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <ScrollView style={styles.container}>
+        <View style={styles.card}>
+          <View style={styles.successIcon}>
+            <Ionicons name="checkmark-circle" size={64} color="#10B981" />
+          </View>
+          
+          <Text style={styles.successTitle}>Investimento Confirmado!</Text>
+          <Text style={styles.successSubtitle}>
+            Seu investimento foi processado com sucesso. Use o link abaixo para realizar o pagamento.
+          </Text>
+
+          <View style={styles.paymentLinkContainer}>
+            <Text style={styles.paymentLinkLabel}>Link de Pagamento:</Text>
+            <View style={styles.paymentLinkBox}>
+              <Text style={styles.paymentLinkText} numberOfLines={2}>
+                {paymentLink}
+              </Text>
+              <TouchableOpacity
+                style={styles.copyButton}
+                onPress={copyToClipboard}
+              >
+                <Ionicons name="copy-outline" size={20} color={colors.accent} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.instructionsContainer}>
+            <Text style={styles.instructionsTitle}>Próximos passos:</Text>
+            <View style={styles.instructionItem}>
+              <View style={styles.instructionNumber}>
+                <Text style={styles.instructionNumberText}>1</Text>
+              </View>
+              <Text style={styles.instructionText}>
+                Clique no link de pagamento ou copie e cole em seu navegador
+              </Text>
+            </View>
+            <View style={styles.instructionItem}>
+              <View style={styles.instructionNumber}>
+                <Text style={styles.instructionNumberText}>2</Text>
+              </View>
+              <Text style={styles.instructionText}>
+                Complete o pagamento seguindo as instruções na página
+              </Text>
+            </View>
+            <View style={styles.instructionItem}>
+              <View style={styles.instructionNumber}>
+                <Text style={styles.instructionNumberText}>3</Text>
+              </View>
+              <Text style={styles.instructionText}>
+                Aguarde a confirmação do pagamento por email
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={() => navigation.navigate('OpportunityDetails')}
+        >
+          <Text style={styles.continueButtonText}>Voltar aos Detalhes</Text>
+          <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 import { StatusBar } from 'expo-status-bar';
 import {
   SafeAreaView,
@@ -8,6 +762,8 @@ import {
   View,
   Platform,
   TouchableOpacity,
+  TextInput,
+  Alert,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +772,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { PieChart } from 'react-native-gifted-charts';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Picker } from '@react-native-picker/picker';
 
 // Paleta Light Mode
 const colors = {
@@ -175,18 +932,18 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
       {/* Investidores */}
       <InfoCard title="Investidores">
-        <View style={styles.investorsGrid}>
-          <View style={styles.investorStat}>
-            <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.total}</Text>
-            <Text style={styles.investorStatLabel}>Total de Investidores</Text>
+        <View style={styles.investorsList}>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Total de Investidores</Text>
+            <Text style={styles.investorListValue}>{opportunityDetails.investidores.total}</Text>
           </View>
-          <View style={styles.investorStat}>
-            <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.ticketMedio}</Text>
-            <Text style={styles.investorStatLabel}>Ticket Médio</Text>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Ticket Médio</Text>
+            <Text style={styles.investorListValue}>{opportunityDetails.investidores.ticketMedio}</Text>
           </View>
-          <View style={styles.investorStat}>
-            <Text style={styles.investorStatNumber}>{opportunityDetails.investidores.maiorInvestimento}</Text>
-            <Text style={styles.investorStatLabel}>Maior Investimento</Text>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Maior Investimento</Text>
+            <Text style={styles.investorListValue}>{opportunityDetails.investidores.maiorInvestimento}</Text>
           </View>
         </View>
       </InfoCard>
@@ -285,6 +1042,17 @@ function OpportunityDetailsScreen({ route, navigation }) {
         </TouchableOpacity>
       </View>
 
+      {/* Botão de Investir no Topo */}
+      <View style={styles.topInvestButtonContainer}>
+        <TouchableOpacity 
+          style={styles.topInvestButton}
+          onPress={() => navigation.navigate('InvestmentAmount')}
+        >
+          <Text style={styles.topInvestButtonText}>Investir Agora</Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
+
       {/* Tabs Navigator */}
       <TopTab.Navigator
         screenOptions={{
@@ -338,14 +1106,6 @@ function OpportunityDetailsScreen({ route, navigation }) {
           }}
         />
       </TopTab.Navigator>
-
-      {/* Botão de Investir Fixo */}
-      <View style={styles.investButtonContainer}>
-        <TouchableOpacity style={styles.investNowButton}>
-          <Text style={styles.investNowButtonText}>Investir Agora</Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -1384,6 +2144,12 @@ function InvestStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="InvestMain" component={InvestScreen} />
       <Stack.Screen name="OpportunityDetails" component={OpportunityDetailsScreen} />
+      <Stack.Screen name="InvestmentAmount" component={InvestmentAmountScreen} />
+      <Stack.Screen name="PersonalData" component={PersonalDataScreen} />
+      <Stack.Screen name="BankData" component={BankDataScreen} />
+      <Stack.Screen name="PixKey" component={PixKeyScreen} />
+      <Stack.Screen name="InvestorProfile" component={InvestorProfileScreen} />
+      <Stack.Screen name="InvestmentConfirmation" component={InvestmentConfirmationScreen} />
     </Stack.Navigator>
   );
 }
@@ -2446,6 +3212,22 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -2 },
     elevation: 4,
   },
+  investButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: colors.card,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: -2 },
+    elevation: 4,
+  },
   investNowButton: {
     backgroundColor: colors.accent,
     paddingVertical: 16,
@@ -2458,6 +3240,34 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   investNowButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  topInvestButtonContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  topInvestButton: {
+    backgroundColor: colors.accent,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  topInvestButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '700',
@@ -2735,5 +3545,551 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: '500',
     marginLeft: 12,
+  },
+
+  // Estilos dos Cards de Investidores
+  investorsList: {
+    marginTop: 20,
+  },
+  investorListItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    backgroundColor: colors.card2,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 1,
+  },
+  investorListLabel: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontWeight: '600',
+    flex: 1,
+  },
+  investorListValue: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: colors.text,
+    letterSpacing: -0.4,
+    textAlign: 'right',
+  },
+
+  // Estilos dos Cards de Empreendedores
+  entrepreneurCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.card,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  entrepreneurAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.accent,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  entrepreneurAvatarText: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: -0.4,
+  },
+  entrepreneurInfo: {
+    flex: 1,
+  },
+  entrepreneurName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 4,
+    letterSpacing: -0.3,
+  },
+  entrepreneurRole: {
+    fontSize: 14,
+    color: colors.accent,
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  entrepreneurExperience: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    fontWeight: '500',
+    lineHeight: 18,
+  },
+
+  // Estilos das Informações Essenciais
+  essentialInfoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+    marginTop: 20,
+  },
+  essentialInfoItem: {
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: colors.card,
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  essentialInfoLabel: {
+    fontSize: 11,
+    color: colors.textSecondary,
+    fontWeight: '600',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  essentialInfoValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+    lineHeight: 22,
+  },
+  
+  // Investment Process Styles
+  investmentContainer: {
+    flex: 1,
+    backgroundColor: colors.bg,
+  },
+  investmentHeader: {
+    backgroundColor: colors.card,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  investmentHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  investmentBackButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: colors.card2,
+  },
+  investmentTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  investmentContent: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
+  investmentCard: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  investmentLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginBottom: 12,
+    letterSpacing: -0.1,
+  },
+  investmentInput: {
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    fontSize: 16,
+    color: colors.text,
+    marginBottom: 20,
+    minHeight: 50,
+  },
+  investmentInputFocused: {
+    borderColor: colors.accent,
+    backgroundColor: colors.card,
+  },
+  investmentAmountInput: {
+    fontSize: 24,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: colors.text,
+    letterSpacing: -0.5,
+  },
+  investmentRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 4,
+  },
+  investmentHalfInput: {
+    flex: 1,
+  },
+  investmentPickerContainer: {
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 12,
+    marginBottom: 20,
+    overflow: 'hidden',
+    minHeight: 50,
+  },
+  investmentPicker: {
+    height: 50,
+    color: colors.text,
+    backgroundColor: 'transparent',
+  },
+  investmentCheckboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 20,
+    gap: 12,
+  },
+  investmentCheckbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: colors.cardBorder,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  investmentCheckboxChecked: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  investmentCheckboxText: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 20,
+  },
+  investmentTermsText: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    lineHeight: 18,
+    marginBottom: 20,
+  },
+  investmentButtonContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: colors.card,
+    borderTopWidth: 1,
+    borderTopColor: colors.cardBorder,
+  },
+  investmentButton: {
+    backgroundColor: colors.accent,
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: colors.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  investmentButtonDisabled: {
+    backgroundColor: colors.cardBorder,
+    shadowOpacity: 0,
+  },
+  investmentButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  investmentButtonTextDisabled: {
+    color: colors.sub,
+  },
+  investmentSummaryCard: {
+    backgroundColor: colors.accentLight,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: colors.accent + '20',
+  },
+  investmentSummaryTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.accent,
+    marginBottom: 12,
+    letterSpacing: -0.3,
+  },
+  investmentSummaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  investmentSummaryLabel: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontWeight: '500',
+  },
+  investmentSummaryValue: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.2,
+  },
+  investmentSummaryTotal: {
+    borderTopWidth: 1,
+    borderTopColor: colors.accent + '30',
+    paddingTop: 12,
+    marginTop: 8,
+  },
+  investmentSummaryTotalValue: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: colors.accent,
+    letterSpacing: -0.4,
+  },
+  investmentPaymentLink: {
+    backgroundColor: colors.accent,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 20,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  investmentPaymentLinkText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  investmentSuccessIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 20,
+    shadowColor: '#10B981',
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 8,
+  },
+  investmentSuccessTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: 12,
+    letterSpacing: -0.5,
+  },
+  investmentSuccessSubtitle: {
+    fontSize: 16,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: 32,
+    lineHeight: 24,
+  },
+
+  // Form Styles
+  formRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 20,
+  },
+  formField: {
+    flex: 1,
+  },
+  formFieldFull: {
+    marginBottom: 20,
+  },
+  formLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginBottom: 12,
+    letterSpacing: -0.1,
+  },
+  formInput: {
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    fontSize: 16,
+    color: colors.text,
+    minHeight: 50,
+  },
+  textArea: {
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  pickerContainer: {
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 12,
+    overflow: 'hidden',
+    minHeight: 50,
+  },
+  picker: {
+    height: 50,
+    color: colors.text,
+    backgroundColor: 'transparent',
+  },
+
+  // Investment Amount Screen Styles
+  investmentHeaderTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  investmentSubtitle: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  amountInputContainer: {
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 16,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    marginBottom: 32,
+    alignItems: 'center',
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  amountInput: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.text,
+    textAlign: 'center',
+    letterSpacing: -0.8,
+    minWidth: 200,
+  },
+  suggestedAmounts: {
+    marginBottom: 32,
+  },
+  suggestedTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginBottom: 16,
+    letterSpacing: -0.2,
+  },
+  suggestedGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  suggestedButton: {
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    minWidth: '47%',
+    alignItems: 'center',
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 1,
+  },
+  suggestedButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+    letterSpacing: -0.2,
+  },
+  continueButton: {
+    backgroundColor: colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    gap: 8,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  continueButtonDisabled: {
+    backgroundColor: colors.cardBorder,
+    shadowOpacity: 0,
+  },
+  continueButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  backButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: colors.card2,
   },
 });
