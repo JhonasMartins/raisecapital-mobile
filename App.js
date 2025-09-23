@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 
 // Páginas do Processo de Investimento
 function InvestmentAmountScreen({ navigation }) {
@@ -31,41 +32,52 @@ function InvestmentAmountScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.container}>
-        <View style={styles.card}>
-          <Text style={styles.investmentTitle}>Quanto você deseja investir?</Text>
-          <Text style={styles.investmentSubtitle}>
-            Defina o valor que você gostaria de investir nesta oportunidade
-          </Text>
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView 
+          style={styles.container} 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.card}>
+            <Text style={styles.investmentTitle}>Quanto você deseja investir?</Text>
+            <Text style={styles.investmentSubtitle}>
+              Defina o valor que você gostaria de investir nesta oportunidade
+            </Text>
 
-          <View style={styles.amountInputContainer}>
-            <TextInput
-              style={styles.amountInput}
-              value={amount}
-              onChangeText={handleAmountChange}
-              placeholder="R$ 0,00"
-              keyboardType="numeric"
-              placeholderTextColor={colors.sub}
-            />
-          </View>
+            <View style={styles.amountInputContainer}>
+              <TextInput
+                style={styles.amountInput}
+                value={amount}
+                onChangeText={handleAmountChange}
+                placeholder="R$ 0,00"
+                keyboardType="numeric"
+                placeholderTextColor={colors.sub}
+              />
+            </View>
 
-          <View style={styles.suggestedAmounts}>
-            <Text style={styles.suggestedTitle}>Valores sugeridos:</Text>
-            <View style={styles.suggestedGrid}>
-              {['1000', '5000', '10000', '25000'].map((value) => (
-                <TouchableOpacity
-                  key={value}
-                  style={styles.suggestedButton}
-                  onPress={() => setAmount(formatCurrency(value + '00'))}
-                >
-                  <Text style={styles.suggestedButtonText}>
-                    {formatCurrency(value + '00')}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+            <View style={styles.suggestedAmounts}>
+              <Text style={styles.suggestedTitle}>Valores sugeridos:</Text>
+              <View style={styles.suggestedGrid}>
+                {['1000', '5000', '10000', '25000'].map((value) => (
+                  <TouchableOpacity
+                    key={value}
+                    style={styles.suggestedButton}
+                    onPress={() => setAmount(formatCurrency(value + '00'))}
+                  >
+                    <Text style={styles.suggestedButtonText}>
+                      {formatCurrency(value + '00')}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
 
         <TouchableOpacity
           style={[styles.continueButton, !amount && styles.continueButtonDisabled]}
@@ -75,7 +87,7 @@ function InvestmentAmountScreen({ navigation }) {
           <Text style={styles.continueButtonText}>Avançar</Text>
           <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -119,7 +131,17 @@ function PersonalDataScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView 
+          style={styles.container}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
         <View style={styles.card}>
           <Text style={styles.investmentTitle}>Confirme seus dados pessoais</Text>
           <Text style={styles.investmentSubtitle}>
@@ -312,7 +334,8 @@ function PersonalDataScreen({ navigation }) {
           <Text style={styles.continueButtonText}>Avançar</Text>
           <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
         </TouchableOpacity>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -346,7 +369,17 @@ function BankDataScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView 
+          style={styles.container}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
         <View style={styles.card}>
           <Text style={styles.investmentTitle}>Confirme seus dados bancários</Text>
           <Text style={styles.investmentSubtitle}>
@@ -414,6 +447,7 @@ function BankDataScreen({ navigation }) {
           <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
         </TouchableOpacity>
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -3036,7 +3070,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   mainInfoCard: {
-    margin: 20,
     marginTop: 0,
     marginBottom: 16,
   },
@@ -3118,7 +3151,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   infoCard: {
-    margin: 20,
     marginTop: 0,
     marginBottom: 16,
   },
@@ -3191,6 +3223,9 @@ const styles = StyleSheet.create({
   tabContent: {
     flex: 1,
     backgroundColor: colors.bg,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 100, // Space for fixed button
   },
   tabScrollView: {
     flex: 1,
