@@ -2609,13 +2609,21 @@ function InvestStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="InvestMain" component={InvestScreen} />
       <Stack.Screen name="OpportunityDetails" component={OpportunityDetailsScreen} />
-      <Stack.Screen name="InvestmentDetails" component={InvestmentDetailsScreen} />
       <Stack.Screen name="InvestmentAmount" component={InvestmentAmountScreen} />
       <Stack.Screen name="PersonalData" component={PersonalDataScreen} />
       <Stack.Screen name="BankData" component={BankDataScreen} />
       <Stack.Screen name="PixKey" component={PixKeyScreen} />
       <Stack.Screen name="InvestorProfile" component={InvestorProfileScreen} />
       <Stack.Screen name="InvestmentConfirmation" component={InvestmentConfirmationScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function PortfolioStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="PortfolioMain" component={PortfolioScreen} />
+      <Stack.Screen name="InvestmentDetails" component={InvestmentDetailsScreen} />
     </Stack.Navigator>
   );
 }
@@ -2672,7 +2680,7 @@ export default function App() {
         />
         <Tab.Screen
           name="Portfolio"
-          component={PortfolioScreen}
+          component={PortfolioStack}
           options={{
             tabBarIcon: ({ color, focused }) => (
               <View style={styles.modernTabContainer}>
