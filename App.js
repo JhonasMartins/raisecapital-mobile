@@ -138,7 +138,7 @@ function PersonalDataScreen({ navigation }) {
       >
         <ScrollView 
           style={styles.container}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 115 }} // 100 + 15px extra space for navbar
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
@@ -376,7 +376,7 @@ function BankDataScreen({ navigation }) {
       >
         <ScrollView 
           style={styles.container}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 115 }} // 100 + 15px extra space for navbar
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
@@ -1395,7 +1395,7 @@ function WalletScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.containerWithNavbar}>
         {/* Header superior elegante */}
         <View style={styles.topbar}>
           <View style={{ width: 28 }} />
@@ -2463,7 +2463,17 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 32,
+    paddingBottom: 47, // 32 + 15px extra space for navbar
+    gap: 16,
+  },
+  // Estilos padrão para ScrollViews com espaçamento do navbar
+  scrollViewWithNavbar: {
+    paddingBottom: 115, // 100 + 15px extra space for navbar
+  },
+  containerWithNavbar: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 47, // 32 + 15px extra space for navbar
     gap: 16,
   },
   text: { color: colors.text, fontSize: 16 },
@@ -3344,11 +3354,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     paddingTop: 20,
     paddingHorizontal: 20,
-    paddingBottom: 100, // Space for fixed button
+    paddingBottom: 115, // 100 + 15px extra space for navbar
   },
   tabScrollView: {
     flex: 1,
-    paddingBottom: 100, // Space for fixed button
+    paddingBottom: 115, // 100 + 15px extra space for navbar
   },
   fixedButtonContainer: {
     position: 'absolute',
