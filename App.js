@@ -3399,14 +3399,24 @@ const styles = StyleSheet.create({
   detailsButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    backgroundColor: colors.accentLight,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.accent + '20',
+    shadowColor: colors.accent,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
   },
   detailsButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 13,
+    fontWeight: '600',
     color: colors.accent,
     marginRight: 4,
+    letterSpacing: -0.1,
   },
 
   // Empty State
