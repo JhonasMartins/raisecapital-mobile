@@ -1215,17 +1215,13 @@ function InvestScreen({ navigation }) {
 
   const renderOportunidadeCard = (item) => (
     <View key={item.id} style={[styles.card, styles.investmentCard]}>
-      <View style={styles.investmentHeader}>
-        <View style={styles.investmentInfo}>
-          <Text style={styles.investmentName}>{item.nome}</Text>
-          <View style={styles.investmentTypeContainer}>
-            <Text style={styles.investmentType}>{item.categoria}</Text>
-            <View style={[styles.statusBadge, { backgroundColor: getRiscoColor(item.risco) + '20' }]}>
-              <Text style={[styles.statusText, { color: getRiscoColor(item.risco) }]}>
-                {item.risco}
-              </Text>
-            </View>
-          </View>
+      <Text style={styles.investmentName}>{item.nome}</Text>
+      <View style={styles.investmentTypeContainer}>
+        <Text style={styles.investmentType}>{item.categoria}</Text>
+        <View style={[styles.statusBadge, { backgroundColor: getRiscoColor(item.risco) + '20' }]}>
+          <Text style={[styles.statusText, { color: getRiscoColor(item.risco) }]}>
+            {item.risco}
+          </Text>
         </View>
         <View style={[styles.statusBadge, styles.statusActive]}>
           <Text style={[styles.statusText, styles.statusActiveText]}>
@@ -1234,27 +1230,25 @@ function InvestScreen({ navigation }) {
         </View>
       </View>
 
-      <View style={styles.investmentDetails}>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Rentabilidade</Text>
-          <Text style={styles.investmentRentability}>{item.rentabilidade}</Text>
-        </View>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Valor mínimo</Text>
-          <Text style={styles.investmentValue}>
-            R$ {item.valorMinimo.toLocaleString('pt-BR')}
-          </Text>
-        </View>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Prazo</Text>
-          <Text style={styles.investmentPeriod}>{item.prazo}</Text>
-        </View>
-        <View style={styles.investmentRow}>
-          <Text style={styles.investmentLabel}>Captado</Text>
-          <Text style={styles.investmentValue}>
-            {item.captado}% (R$ {(item.meta * item.captado / 100).toLocaleString('pt-BR')})
-          </Text>
-        </View>
+      <View style={styles.investmentRow}>
+        <Text style={styles.investmentLabel}>Rentabilidade</Text>
+        <Text style={styles.investmentRentability}>{item.rentabilidade}</Text>
+      </View>
+      <View style={styles.investmentRow}>
+        <Text style={styles.investmentLabel}>Valor mínimo</Text>
+        <Text style={styles.investmentValue}>
+          R$ {item.valorMinimo.toLocaleString('pt-BR')}
+        </Text>
+      </View>
+      <View style={styles.investmentRow}>
+        <Text style={styles.investmentLabel}>Prazo</Text>
+        <Text style={styles.investmentPeriod}>{item.prazo}</Text>
+      </View>
+      <View style={styles.investmentRow}>
+        <Text style={styles.investmentLabel}>Captado</Text>
+        <Text style={styles.investmentValue}>
+          {item.captado}% (R$ {(item.meta * item.captado / 100).toLocaleString('pt-BR')})
+        </Text>
       </View>
 
       <View style={styles.progressContainer}>
@@ -2840,6 +2834,7 @@ const styles = StyleSheet.create({
   investmentTypeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 12,
   },
   investmentType: {
     fontSize: 12,
@@ -2849,7 +2844,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
-    marginRight: 8,
   },
   statusBadge: {
     paddingHorizontal: 8,
