@@ -4081,7 +4081,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    minWidth: '47%',
+    flex: 1,
     alignItems: 'center',
     shadowColor: colors.shadow,
     shadowOpacity: 0.05,
