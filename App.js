@@ -479,7 +479,7 @@ function PixKeyScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.containerWithNavbar}>
         <View style={styles.card}>
           <Text style={styles.investmentTitle}>Informe sua chave PIX</Text>
           <Text style={styles.investmentSubtitle}>
@@ -584,7 +584,7 @@ function InvestorProfileScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.containerWithNavbar}>
         <View style={styles.card}>
           <Text style={styles.investmentTitle}>Declaração e Perfil de Investidor</Text>
           <Text style={styles.investmentSubtitle}>
@@ -720,7 +720,7 @@ function InvestmentConfirmationScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.containerWithNavbar}>
         <View style={styles.card}>
           <View style={styles.successIcon}>
             <Ionicons name="checkmark-circle" size={64} color="#10B981" />
