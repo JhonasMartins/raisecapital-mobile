@@ -2019,7 +2019,7 @@ function ExtractScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.containerWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Extrato</Text>
@@ -2156,7 +2156,7 @@ function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.containerWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Perfil</Text>
