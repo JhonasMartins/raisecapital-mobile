@@ -137,7 +137,7 @@ function PersonalDataScreen({ navigation }) {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <ScrollView 
-          style={styles.container}
+          style={styles.containerWithNavbar}
           contentContainerStyle={{ paddingBottom: 115 }} // 100 + 15px extra space for navbar
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
@@ -375,7 +375,7 @@ function BankDataScreen({ navigation }) {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <ScrollView 
-          style={styles.container}
+          style={styles.containerWithNavbar}
           contentContainerStyle={{ paddingBottom: 115 }} // 100 + 15px extra space for navbar
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
@@ -912,7 +912,7 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
   // Tab Visão Geral
   const OverviewTab = () => (
-    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Capa */}
       <View style={styles.coverContainer}>
         <View style={styles.coverPlaceholder}>
@@ -989,7 +989,7 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
   // Tab Detalhes
   const DetailsTab = () => (
-    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Sobre a Operação */}
       <InfoCard title="Sobre a Operação">
         <Text style={styles.contentText}>{opportunityDetails.sobreOperacao}</Text>
@@ -1027,7 +1027,7 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
   // Tab Documentos
   const DocumentsTab = () => (
-    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Documentos Jurídicos */}
       <InfoCard title="Documentos Jurídicos">
         {opportunityDetails.documentosJuridicos.map((doc, index) => (
