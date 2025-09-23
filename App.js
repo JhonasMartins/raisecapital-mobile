@@ -1144,6 +1144,315 @@ function OpportunityDetailsScreen({ route, navigation }) {
     </SafeAreaView>
   );
 }
+
+function InvestmentDetailsScreen({ route, navigation }) {
+  const { investment } = route.params;
+
+  // Dados mock expandidos para o investimento
+  const investmentDetails = {
+    ...investment,
+    capa: 'https://via.placeholder.com/400x200/04a2fa/ffffff?text=Meu+Investimento',
+    rentabilidadeAtual: '8,2% a.a.',
+    valorInvestido: 'R$ 5.000',
+    valorAtual: 'R$ 5.410',
+    rendimento: 'R$ 410',
+    percentualGanho: '+8,2%',
+    prazoRestante: '18 meses',
+    modalidade: 'Equity Crowdfunding',
+    statusProgress: 65, // Porcentagem do prazo decorrido
+    
+    // Seções de conteúdo
+    sobreInvestimento: 'Seu investimento está sendo aplicado no desenvolvimento de um edifício comercial localizado na região central de São Paulo. O projeto está progredindo conforme o cronograma estabelecido.',
+    
+    remuneracao: 'A remuneração está sendo calculada com base na valorização do imóvel e nos rendimentos de aluguel. Atualmente apresentando retorno de 8,2% ao ano, com distribuição de dividendos semestrais.',
+    
+    sobreEmpresa: 'Fundada em 2015, a InvestCorp é uma empresa especializada em desenvolvimento imobiliário com foco em projetos comerciais de alto padrão. Já desenvolveu mais de 50 projetos bem-sucedidos.',
+    
+    empreendedores: [
+      { nome: 'João Silva', cargo: 'CEO', experiencia: '15 anos no mercado imobiliário' },
+      { nome: 'Maria Santos', cargo: 'Diretora Financeira', experiencia: '12 anos em finanças corporativas' }
+    ],
+    
+    documentosJuridicos: [
+      'Contrato de Investimento',
+      'Comprovante de Investimento',
+      'Relatório de Performance',
+      'Extrato de Rendimentos'
+    ],
+    
+    informacoesEssenciais: {
+      tipoInvestimento: 'Real Estate',
+      setorEconomico: 'Imobiliário',
+      localizacao: 'São Paulo - SP',
+      dataInvestimento: '15/01/2024',
+      dataVencimento: '15/07/2025',
+      risco: 'Médio'
+    },
+    
+    performance: {
+      rendimentoMensal: 'R$ 68,33',
+      ultimoDividendo: 'R$ 205',
+      proximoDividendo: '15/07/2024',
+      totalRecebido: 'R$ 410'
+    }
+  };
+
+  const formatBRL = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
+
+  const ProgressChart = ({ percentage }) => (
+    <View style={styles.progressChartContainer}>
+      <View style={styles.progressCircle}>
+        <View style={[styles.progressFillCircle, { 
+          transform: [{ rotate: `${(percentage / 100) * 360}deg` }] 
+        }]} />
+        <View style={styles.progressInnerCircle}>
+          <Text style={styles.progressPercentage}>{percentage}%</Text>
+          <Text style={styles.progressLabel}>Decorrido</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  const InfoCard = ({ title, children }) => (
+    <View style={[styles.card, styles.infoCard]}>
+      <Text style={styles.infoCardTitle}>{title}</Text>
+      {children}
+    </View>
+  );
+
+  // Tab Visão Geral
+  const OverviewTab = () => (
+    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+      {/* Capa */}
+      <View style={styles.coverContainer}>
+        <View style={styles.coverPlaceholder}>
+          <Ionicons name="trending-up" size={48} color={colors.sub} />
+          <Text style={styles.coverText}>Meu Investimento</Text>
+        </View>
+      </View>
+
+      {/* Informações Principais */}
+      <View style={[styles.card, styles.mainInfoCard]}>
+        <Text style={styles.opportunityTitle}>{investmentDetails.nome}</Text>
+        <Text style={styles.opportunityType}>{investmentDetails.tipo}</Text>
+        
+        <View style={styles.mainInfoGrid}>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Rentabilidade Atual</Text>
+            <Text style={styles.mainInfoValue}>{investmentDetails.rentabilidadeAtual}</Text>
+          </View>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Valor Investido</Text>
+            <Text style={styles.mainInfoValue}>{investmentDetails.valorInvestido}</Text>
+          </View>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Valor Atual</Text>
+            <Text style={styles.mainInfoValue}>{investmentDetails.valorAtual}</Text>
+          </View>
+          <View style={styles.mainInfoItem}>
+            <Text style={styles.mainInfoLabel}>Rendimento</Text>
+            <Text style={[styles.mainInfoValue, { color: colors.legend2 }]}>{investmentDetails.rendimento}</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Status com Gráfico */}
+      <InfoCard title="Progresso do Investimento">
+        <ProgressChart percentage={investmentDetails.statusProgress} />
+        <View style={styles.statusInfo}>
+          <View style={styles.statusRow}>
+            <Text style={styles.statusLabel}>Prazo Restante</Text>
+            <Text style={styles.statusValue}>{investmentDetails.prazoRestante}</Text>
+          </View>
+          <View style={styles.statusRow}>
+            <Text style={styles.statusLabel}>Ganho Percentual</Text>
+            <Text style={[styles.statusValueHighlight, { color: colors.legend2 }]}>{investmentDetails.percentualGanho}</Text>
+          </View>
+          <View style={styles.statusRow}>
+            <Text style={styles.statusLabel}>Modalidade</Text>
+            <Text style={styles.statusValue}>{investmentDetails.modalidade}</Text>
+          </View>
+        </View>
+      </InfoCard>
+
+      {/* Performance */}
+      <InfoCard title="Performance">
+        <View style={styles.investorsList}>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Rendimento Mensal</Text>
+            <Text style={styles.investorListValue}>{investmentDetails.performance.rendimentoMensal}</Text>
+          </View>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Último Dividendo</Text>
+            <Text style={styles.investorListValue}>{investmentDetails.performance.ultimoDividendo}</Text>
+          </View>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Próximo Dividendo</Text>
+            <Text style={styles.investorListValue}>{investmentDetails.performance.proximoDividendo}</Text>
+          </View>
+          <View style={styles.investorListItem}>
+            <Text style={styles.investorListLabel}>Total Recebido</Text>
+            <Text style={[styles.investorListValue, { color: colors.legend2 }]}>{investmentDetails.performance.totalRecebido}</Text>
+          </View>
+        </View>
+      </InfoCard>
+
+      <View style={{ height: 32 }} />
+    </ScrollView>
+  );
+
+  // Tab Detalhes
+  const DetailsTab = () => (
+    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+      {/* Sobre o Investimento */}
+      <InfoCard title="Sobre o Investimento">
+        <Text style={styles.contentText}>{investmentDetails.sobreInvestimento}</Text>
+      </InfoCard>
+
+      {/* Remuneração */}
+      <InfoCard title="Remuneração">
+        <Text style={styles.contentText}>{investmentDetails.remuneracao}</Text>
+      </InfoCard>
+
+      {/* Sobre a Empresa */}
+      <InfoCard title="Sobre a Empresa">
+        <Text style={styles.contentText}>{investmentDetails.sobreEmpresa}</Text>
+      </InfoCard>
+
+      {/* Empreendedores */}
+      <InfoCard title="Empreendedores">
+        {investmentDetails.empreendedores.map((emp, index) => (
+          <View key={index} style={styles.entrepreneurCard}>
+            <View style={styles.entrepreneurAvatar}>
+              <Ionicons name="person" size={24} color={colors.accent} />
+            </View>
+            <View style={styles.entrepreneurInfo}>
+              <Text style={styles.entrepreneurName}>{emp.nome}</Text>
+              <Text style={styles.entrepreneurRole}>{emp.cargo}</Text>
+              <Text style={styles.entrepreneurExperience}>{emp.experiencia}</Text>
+            </View>
+          </View>
+        ))}
+      </InfoCard>
+
+      <View style={{ height: 32 }} />
+    </ScrollView>
+  );
+
+  // Tab Documentos
+  const DocumentsTab = () => (
+    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+      {/* Documentos do Investimento */}
+      <InfoCard title="Documentos do Investimento">
+        {investmentDetails.documentosJuridicos.map((doc, index) => (
+          <TouchableOpacity key={index} style={styles.documentItem}>
+            <Ionicons name="document-text-outline" size={20} color={colors.accent} />
+            <Text style={styles.documentName}>{doc}</Text>
+            <Ionicons name="download-outline" size={16} color={colors.sub} />
+          </TouchableOpacity>
+        ))}
+      </InfoCard>
+
+      {/* Informações Essenciais */}
+      <InfoCard title="Informações Essenciais do Investimento">
+        <View style={styles.essentialInfoGrid}>
+          {Object.entries(investmentDetails.informacoesEssenciais).map(([key, value]) => (
+            <View key={key} style={styles.essentialInfoItem}>
+              <Text style={styles.essentialInfoLabel}>
+                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+              </Text>
+              <Text style={styles.essentialInfoValue}>{value}</Text>
+            </View>
+          ))}
+        </View>
+      </InfoCard>
+
+      <View style={{ height: 32 }} />
+    </ScrollView>
+  );
+
+  const TopTab = createMaterialTopTabNavigator();
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style="dark" />
+      
+      {/* Header */}
+      <View style={styles.detailsHeader}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.detailsHeaderTitle}>Detalhes do Investimento</Text>
+        <TouchableOpacity style={styles.shareButton}>
+          <Ionicons name="share-outline" size={24} color={colors.text} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Tabs Navigator */}
+      <TopTab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.sub,
+          tabBarIndicatorStyle: {
+            backgroundColor: colors.accent,
+            height: 3,
+            borderRadius: 2,
+          },
+          tabBarStyle: {
+            backgroundColor: colors.card,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.cardBorder,
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarLabelStyle: {
+            fontSize: 14,
+            fontWeight: '600',
+            textTransform: 'none',
+          },
+          tabBarPressColor: colors.accentLight,
+        }}
+      >
+        <TopTab.Screen 
+          name="Visão Geral" 
+          component={OverviewTab}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="analytics-outline" size={20} color={color} />
+            ),
+          }}
+        />
+        <TopTab.Screen 
+          name="Detalhes" 
+          component={DetailsTab}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="information-circle-outline" size={20} color={color} />
+            ),
+          }}
+        />
+        <TopTab.Screen 
+          name="Documentos" 
+          component={DocumentsTab}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="document-text-outline" size={20} color={color} />
+            ),
+          }}
+        />
+      </TopTab.Navigator>
+    </SafeAreaView>
+  );
+}
+
 function InvestScreen({ navigation }) {
   // Dados mock para oportunidades de investimento
   const oportunidades = [
@@ -1533,7 +1842,7 @@ function WalletScreen() {
 }
 
 // Portfolio Screen com abas Ativos e Finalizados
-function PortfolioScreen() {
+function PortfolioScreen({ navigation }) {
   const [activeFilter, setActiveFilter] = useState('todos');
 
   // Dados mock para todos os investimentos (ativos, pendentes e finalizados)
@@ -1771,7 +2080,10 @@ function PortfolioScreen() {
           <Text style={styles.investmentDate}>
             {isActive || isPending ? `Investido em ${investment.dataInvestimento}` : `Finalizado em ${investment.dataFinalizacao}`}
           </Text>
-          <TouchableOpacity style={styles.detailsButton}>
+          <TouchableOpacity 
+            style={styles.detailsButton}
+            onPress={() => navigation.navigate('InvestmentDetails', { investment })}
+          >
             <Text style={styles.detailsButtonText}>Ver detalhes</Text>
             <Ionicons name="chevron-forward" size={12} color={colors.accent} />
           </TouchableOpacity>
@@ -2297,6 +2609,7 @@ function InvestStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="InvestMain" component={InvestScreen} />
       <Stack.Screen name="OpportunityDetails" component={OpportunityDetailsScreen} />
+      <Stack.Screen name="InvestmentDetails" component={InvestmentDetailsScreen} />
       <Stack.Screen name="InvestmentAmount" component={InvestmentAmountScreen} />
       <Stack.Screen name="PersonalData" component={PersonalDataScreen} />
       <Stack.Screen name="BankData" component={BankDataScreen} />
