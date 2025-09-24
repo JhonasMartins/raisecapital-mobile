@@ -2296,7 +2296,7 @@ function ExtractScreen() {
 }
 
 // ---------------- Placeholders for other tabs ----------------
-function ProfileScreen() {
+function ProfileScreen({ navigation }) {
   const [showBalance, setShowBalance] = useState(true);
 
   return (
@@ -2306,7 +2306,10 @@ function ProfileScreen() {
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Perfil</Text>
           <View style={styles.topbarIcons}>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity 
+              style={styles.iconButton}
+              onPress={() => navigation.navigate('Settings')}
+            >
               <Ionicons name="settings-outline" size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
@@ -2387,22 +2390,34 @@ function ProfileScreen() {
             <Text style={styles.menuSubText}>(para edição)</Text>
             <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigation.navigate('BankData')}
+          >
             <Ionicons name="card-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Dados Bancários</Text>
             <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigation.navigate('Withdraw')}
+          >
             <Ionicons name="arrow-up-circle-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Resgate</Text>
             <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigation.navigate('Tax')}
+          >
             <Ionicons name="document-text-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Imposto de Renda</Text>
             <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity 
+            style={styles.menuItem}
+            onPress={() => navigation.navigate('Settings')}
+          >
             <Ionicons name="settings-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Configurações</Text>
             <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
@@ -2433,6 +2448,868 @@ function ProfileScreen() {
   );
 }
 
+// Dados Bancários Screen
+function BankDataScreen({ navigation }) {
+  const [bankData, setBankData] = useState({
+    bank: '',
+    agency: '',
+    account: '',
+    accountType: 'corrente',
+    cpf: '123.456.789-00',
+    name: 'João Leismann'
+  });
+
+  const banks = [
+    'Banco do Brasil',
+    'Bradesco',
+    'Caixa Econômica Federal',
+    'Itaú',
+    'Santander',
+    'Nubank',
+    'Inter',
+    'C6 Bank',
+    'Outros'
+  ];
+
+  const handleSave = () => {
+    Alert.alert(
+      'Dados Salvos',
+      'Suas informações bancárias foram atualizadas com sucesso!',
+      [{ text: 'OK' }]
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back-outline" size={20} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topbarTitle}>Dados Bancários</Text>
+          <View style={styles.topbarIcons} />
+        </View>
+
+        {/* Info Card */}
+        <View style={[styles.card, styles.infoCard]}>
+          <View style={styles.infoHeader}>
+            <Ionicons name="shield-checkmark" size={24} color={colors.accent} />
+            <Text style={styles.infoTitle}>Segurança dos seus dados</Text>
+          </View>
+          <Text style={styles.infoText}>
+            Suas informações bancárias são criptografadas e protegidas. Utilizamos os mais altos padrões de segurança para garantir a proteção dos seus dados.
+          </Text>
+        </View>
+
+        {/* Form Card */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Informações Bancárias</Text>
+          
+          {/* Bank Selection */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Banco</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={bankData.bank}
+                onValueChange={(value) => setBankData({...bankData, bank: value})}
+                style={styles.picker}
+              >
+                <Picker.Item label="Selecione seu banco" value="" />
+                {banks.map((bank, index) => (
+                  <Picker.Item key={index} label={bank} value={bank} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+
+          {/* Agency */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Agência</Text>
+            <TextInput
+              style={styles.textInput}
+              value={bankData.agency}
+              onChangeText={(text) => setBankData({...bankData, agency: text})}
+              placeholder="Ex: 1234"
+              keyboardType="numeric"
+            />
+          </View>
+
+          {/* Account */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Conta</Text>
+            <TextInput
+              style={styles.textInput}
+              value={bankData.account}
+              onChangeText={(text) => setBankData({...bankData, account: text})}
+              placeholder="Ex: 12345-6"
+            />
+          </View>
+
+          {/* Account Type */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Tipo de Conta</Text>
+            <View style={styles.radioGroup}>
+              <TouchableOpacity 
+                style={styles.radioOption}
+                onPress={() => setBankData({...bankData, accountType: 'corrente'})}
+              >
+                <View style={[styles.radioCircle, bankData.accountType === 'corrente' && styles.radioCircleSelected]}>
+                  {bankData.accountType === 'corrente' && <View style={styles.radioInner} />}
+                </View>
+                <Text style={styles.radioText}>Conta Corrente</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.radioOption}
+                onPress={() => setBankData({...bankData, accountType: 'poupanca'})}
+              >
+                <View style={[styles.radioCircle, bankData.accountType === 'poupanca' && styles.radioCircleSelected]}>
+                  {bankData.accountType === 'poupanca' && <View style={styles.radioInner} />}
+                </View>
+                <Text style={styles.radioText}>Conta Poupança</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* CPF (readonly) */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>CPF</Text>
+            <TextInput
+              style={[styles.textInput, styles.textInputDisabled]}
+              value={bankData.cpf}
+              editable={false}
+            />
+          </View>
+
+          {/* Name (readonly) */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Nome do Titular</Text>
+            <TextInput
+              style={[styles.textInput, styles.textInputDisabled]}
+              value={bankData.name}
+              editable={false}
+            />
+          </View>
+        </View>
+
+        {/* Save Button */}
+        <TouchableOpacity 
+          style={[styles.continueButton, (!bankData.bank || !bankData.agency || !bankData.account) && styles.continueButtonDisabled]}
+          onPress={handleSave}
+          disabled={!bankData.bank || !bankData.agency || !bankData.account}
+        >
+          <Text style={[styles.continueButtonText, (!bankData.bank || !bankData.agency || !bankData.account) && styles.continueButtonTextDisabled]}>
+            Salvar Dados Bancários
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+// Resgate Screen
+function WithdrawScreen({ navigation }) {
+  const [selectedInvestment, setSelectedInvestment] = useState(null);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawType, setWithdrawType] = useState('partial');
+
+  const investments = [
+    {
+      id: 1,
+      name: 'EcoTech Solutions',
+      amount: 5000,
+      available: 4800,
+      type: 'Startup',
+      profitability: '+12%'
+    },
+    {
+      id: 2,
+      name: 'GreenEnergy Corp',
+      amount: 3000,
+      available: 3200,
+      type: 'Energia',
+      profitability: '+8%'
+    },
+    {
+      id: 3,
+      name: 'HealthTech Innovation',
+      amount: 2500,
+      available: 2650,
+      type: 'Saúde',
+      profitability: '+6%'
+    }
+  ];
+
+  const handleWithdraw = () => {
+    if (!selectedInvestment) {
+      Alert.alert('Erro', 'Selecione um investimento para resgatar.');
+      return;
+    }
+
+    if (withdrawType === 'partial' && (!withdrawAmount || parseFloat(withdrawAmount) <= 0)) {
+      Alert.alert('Erro', 'Informe um valor válido para resgate.');
+      return;
+    }
+
+    const amount = withdrawType === 'total' ? selectedInvestment.available : parseFloat(withdrawAmount);
+    
+    Alert.alert(
+      'Confirmar Resgate',
+      `Deseja resgatar R$ ${amount.toFixed(2)} do investimento ${selectedInvestment.name}?\n\nO valor será creditado em sua conta em até 2 dias úteis.`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { 
+          text: 'Confirmar', 
+          onPress: () => {
+            Alert.alert('Resgate Solicitado', 'Sua solicitação de resgate foi processada com sucesso!');
+            navigation.goBack();
+          }
+        }
+      ]
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back-outline" size={20} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topbarTitle}>Resgate</Text>
+          <View style={styles.topbarIcons} />
+        </View>
+
+        {/* Info Card */}
+        <View style={[styles.card, styles.infoCard]}>
+          <View style={styles.infoHeader}>
+            <Ionicons name="time-outline" size={24} color={colors.accent} />
+            <Text style={styles.infoTitle}>Prazo para resgate</Text>
+          </View>
+          <Text style={styles.infoText}>
+            O valor será creditado em sua conta bancária cadastrada em até 2 dias úteis após a confirmação.
+          </Text>
+        </View>
+
+        {/* Investments List */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Selecione o investimento</Text>
+          
+          {investments.map((investment) => (
+            <TouchableOpacity
+              key={investment.id}
+              style={[
+                styles.investmentOption,
+                selectedInvestment?.id === investment.id && styles.investmentOptionSelected
+              ]}
+              onPress={() => setSelectedInvestment(investment)}
+            >
+              <View style={styles.investmentInfo}>
+                <Text style={styles.investmentName}>{investment.name}</Text>
+                <Text style={styles.investmentType}>{investment.type}</Text>
+                <View style={styles.investmentAmounts}>
+                  <Text style={styles.investmentAmount}>
+                    Investido: R$ {investment.amount.toLocaleString('pt-BR')}
+                  </Text>
+                  <Text style={[styles.investmentAmount, styles.availableAmount]}>
+                    Disponível: R$ {investment.available.toLocaleString('pt-BR')}
+                  </Text>
+                  <Text style={[styles.investmentAmount, styles.profitability]}>
+                    {investment.profitability}
+                  </Text>
+                </View>
+              </View>
+              <View style={[styles.radioCircle, selectedInvestment?.id === investment.id && styles.radioCircleSelected]}>
+                {selectedInvestment?.id === investment.id && <View style={styles.radioInner} />}
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Withdraw Type */}
+        {selectedInvestment && (
+          <View style={[styles.card, styles.formCard]}>
+            <Text style={styles.sectionTitle}>Tipo de resgate</Text>
+            
+            <View style={styles.radioGroup}>
+              <TouchableOpacity 
+                style={styles.radioOption}
+                onPress={() => setWithdrawType('partial')}
+              >
+                <View style={[styles.radioCircle, withdrawType === 'partial' && styles.radioCircleSelected]}>
+                  {withdrawType === 'partial' && <View style={styles.radioInner} />}
+                </View>
+                <Text style={styles.radioText}>Resgate Parcial</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.radioOption}
+                onPress={() => setWithdrawType('total')}
+              >
+                <View style={[styles.radioCircle, withdrawType === 'total' && styles.radioCircleSelected]}>
+                  {withdrawType === 'total' && <View style={styles.radioInner} />}
+                </View>
+                <Text style={styles.radioText}>Resgate Total</Text>
+              </TouchableOpacity>
+            </View>
+
+            {withdrawType === 'partial' && (
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Valor do resgate</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={withdrawAmount}
+                  onChangeText={setWithdrawAmount}
+                  placeholder="R$ 0,00"
+                  keyboardType="numeric"
+                />
+                <Text style={styles.inputHelper}>
+                  Máximo disponível: R$ {selectedInvestment.available.toLocaleString('pt-BR')}
+                </Text>
+              </View>
+            )}
+
+            {withdrawType === 'total' && (
+              <View style={styles.totalWithdrawInfo}>
+                <Text style={styles.totalWithdrawLabel}>Valor total do resgate:</Text>
+                <Text style={styles.totalWithdrawAmount}>
+                  R$ {selectedInvestment.available.toLocaleString('pt-BR')}
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* Withdraw Button */}
+        {selectedInvestment && (
+          <TouchableOpacity 
+            style={styles.continueButton}
+            onPress={handleWithdraw}
+          >
+            <Text style={styles.continueButtonText}>
+              Solicitar Resgate
+            </Text>
+          </TouchableOpacity>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+// Imposto de Renda Screen
+function TaxScreen({ navigation }) {
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [documents, setDocuments] = useState([]);
+
+  const years = ['2024', '2023', '2022', '2021'];
+  
+  const taxData = {
+    '2024': {
+      totalInvested: 15000,
+      totalProfit: 1800,
+      totalTax: 270,
+      investments: [
+        { name: 'EcoTech Solutions', invested: 5000, profit: 600, tax: 90 },
+        { name: 'GreenEnergy Corp', invested: 3000, profit: 240, tax: 36 },
+        { name: 'HealthTech Innovation', invested: 2500, profit: 150, tax: 22.5 },
+        { name: 'AgriTech Startup', invested: 4500, profit: 810, tax: 121.5 }
+      ]
+    },
+    '2023': {
+      totalInvested: 12000,
+      totalProfit: 1440,
+      totalTax: 216,
+      investments: [
+        { name: 'EcoTech Solutions', invested: 4000, profit: 480, tax: 72 },
+        { name: 'GreenEnergy Corp', invested: 3000, profit: 360, tax: 54 },
+        { name: 'HealthTech Innovation', invested: 5000, profit: 600, tax: 90 }
+      ]
+    }
+  };
+
+  const currentYearData = taxData[selectedYear] || { totalInvested: 0, totalProfit: 0, totalTax: 0, investments: [] };
+
+  const generateDocument = (type) => {
+    Alert.alert(
+      'Documento Gerado',
+      `O documento ${type} para o ano de ${selectedYear} foi gerado com sucesso!`,
+      [
+        { text: 'OK' },
+        { 
+          text: 'Baixar', 
+          onPress: () => {
+            Alert.alert('Download', 'Documento baixado com sucesso!');
+          }
+        }
+      ]
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back-outline" size={20} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topbarTitle}>Imposto de Renda</Text>
+          <View style={styles.topbarIcons} />
+        </View>
+
+        {/* Info Card */}
+        <View style={[styles.card, styles.infoCard]}>
+          <View style={styles.infoHeader}>
+            <Ionicons name="document-text-outline" size={24} color={colors.accent} />
+            <Text style={styles.infoTitle}>Declaração de IR</Text>
+          </View>
+          <Text style={styles.infoText}>
+            Aqui você encontra todos os documentos necessários para declarar seus investimentos no Imposto de Renda.
+          </Text>
+        </View>
+
+        {/* Year Selection */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Selecione o ano</Text>
+          <View style={styles.yearSelector}>
+            {years.map((year) => (
+              <TouchableOpacity
+                key={year}
+                style={[
+                  styles.yearButton,
+                  selectedYear === year && styles.yearButtonSelected
+                ]}
+                onPress={() => setSelectedYear(year)}
+              >
+                <Text style={[
+                  styles.yearButtonText,
+                  selectedYear === year && styles.yearButtonTextSelected
+                ]}>
+                  {year}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Tax Summary */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Resumo {selectedYear}</Text>
+          
+          <View style={styles.taxSummary}>
+            <View style={styles.taxSummaryItem}>
+              <Text style={styles.taxSummaryLabel}>Total Investido</Text>
+              <Text style={styles.taxSummaryValue}>
+                R$ {currentYearData.totalInvested.toLocaleString('pt-BR')}
+              </Text>
+            </View>
+            
+            <View style={styles.taxSummaryItem}>
+              <Text style={styles.taxSummaryLabel}>Lucro Total</Text>
+              <Text style={[styles.taxSummaryValue, styles.profitValue]}>
+                R$ {currentYearData.totalProfit.toLocaleString('pt-BR')}
+              </Text>
+            </View>
+            
+            <View style={styles.taxSummaryItem}>
+              <Text style={styles.taxSummaryLabel}>Imposto Devido (15%)</Text>
+              <Text style={[styles.taxSummaryValue, styles.taxValue]}>
+                R$ {currentYearData.totalTax.toLocaleString('pt-BR')}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Investment Details */}
+        {currentYearData.investments.length > 0 && (
+          <View style={[styles.card, styles.formCard]}>
+            <Text style={styles.sectionTitle}>Detalhamento por Investimento</Text>
+            
+            {currentYearData.investments.map((investment, index) => (
+              <View key={index} style={styles.investmentTaxItem}>
+                <Text style={styles.investmentTaxName}>{investment.name}</Text>
+                <View style={styles.investmentTaxDetails}>
+                  <Text style={styles.investmentTaxDetail}>
+                    Investido: R$ {investment.invested.toLocaleString('pt-BR')}
+                  </Text>
+                  <Text style={[styles.investmentTaxDetail, styles.profitDetail]}>
+                    Lucro: R$ {investment.profit.toLocaleString('pt-BR')}
+                  </Text>
+                  <Text style={[styles.investmentTaxDetail, styles.taxDetail]}>
+                    Imposto: R$ {investment.tax.toLocaleString('pt-BR')}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Documents */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Documentos Disponíveis</Text>
+          
+          <TouchableOpacity 
+            style={styles.documentButton}
+            onPress={() => generateDocument('Informe de Rendimentos')}
+          >
+            <Ionicons name="document-outline" size={24} color={colors.accent} />
+            <View style={styles.documentInfo}>
+              <Text style={styles.documentTitle}>Informe de Rendimentos</Text>
+              <Text style={styles.documentDescription}>
+                Documento oficial com todos os rendimentos do ano
+              </Text>
+            </View>
+            <Ionicons name="download-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.documentButton}
+            onPress={() => generateDocument('Demonstrativo de Ganhos de Capital')}
+          >
+            <Ionicons name="bar-chart-outline" size={24} color={colors.accent} />
+            <View style={styles.documentInfo}>
+              <Text style={styles.documentTitle}>Demonstrativo de Ganhos de Capital</Text>
+              <Text style={styles.documentDescription}>
+                Relatório detalhado de ganhos e perdas de capital
+              </Text>
+            </View>
+            <Ionicons name="download-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.documentButton}
+            onPress={() => generateDocument('Extrato Anual')}
+          >
+            <Ionicons name="receipt-outline" size={24} color={colors.accent} />
+            <View style={styles.documentInfo}>
+              <Text style={styles.documentTitle}>Extrato Anual</Text>
+              <Text style={styles.documentDescription}>
+                Extrato completo de todas as movimentações
+              </Text>
+            </View>
+            <Ionicons name="download-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Help Section */}
+        <View style={[styles.card, styles.infoCard]}>
+          <View style={styles.infoHeader}>
+            <Ionicons name="help-circle-outline" size={24} color={colors.accent} />
+            <Text style={styles.infoTitle}>Precisa de ajuda?</Text>
+          </View>
+          <Text style={styles.infoText}>
+            Entre em contato com nosso suporte especializado em questões tributárias para esclarecer suas dúvidas sobre a declaração do IR.
+          </Text>
+          <TouchableOpacity style={styles.helpButton}>
+            <Text style={styles.helpButtonText}>Falar com Especialista</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+// Configurações Screen
+function SettingsScreen({ navigation }) {
+  const [notifications, setNotifications] = useState({
+    push: true,
+    email: true,
+    sms: false,
+    investment: true,
+    news: false
+  });
+
+  const [preferences, setPreferences] = useState({
+    theme: 'light',
+    language: 'pt-BR',
+    currency: 'BRL'
+  });
+
+  const handleNotificationChange = (type, value) => {
+    setNotifications(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const handlePreferenceChange = (type, value) => {
+    setPreferences(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const handleSaveSettings = () => {
+    Alert.alert(
+      'Configurações Salvas',
+      'Suas preferências foram atualizadas com sucesso!',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Excluir Conta',
+      'Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita e todos os seus dados serão perdidos.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { 
+          text: 'Excluir', 
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert('Conta Excluída', 'Sua conta foi excluída com sucesso.');
+          }
+        }
+      ]
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
+        {/* Header */}
+        <View style={styles.topbar}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back-outline" size={20} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topbarTitle}>Configurações</Text>
+          <View style={styles.topbarIcons} />
+        </View>
+
+        {/* Notifications Section */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Notificações</Text>
+          
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Notificações Push</Text>
+              <Text style={styles.settingDescription}>Receba alertas no seu dispositivo</Text>
+            </View>
+            <Switch
+              value={notifications.push}
+              onValueChange={(value) => handleNotificationChange('push', value)}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={notifications.push ? colors.background : colors.textSecondary}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Notificações por Email</Text>
+              <Text style={styles.settingDescription}>Receba atualizações por email</Text>
+            </View>
+            <Switch
+              value={notifications.email}
+              onValueChange={(value) => handleNotificationChange('email', value)}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={notifications.email ? colors.background : colors.textSecondary}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>SMS</Text>
+              <Text style={styles.settingDescription}>Receba alertas por SMS</Text>
+            </View>
+            <Switch
+              value={notifications.sms}
+              onValueChange={(value) => handleNotificationChange('sms', value)}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={notifications.sms ? colors.background : colors.textSecondary}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Atualizações de Investimentos</Text>
+              <Text style={styles.settingDescription}>Notificações sobre seus investimentos</Text>
+            </View>
+            <Switch
+              value={notifications.investment}
+              onValueChange={(value) => handleNotificationChange('investment', value)}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={notifications.investment ? colors.background : colors.textSecondary}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Notícias e Novidades</Text>
+              <Text style={styles.settingDescription}>Receba novidades sobre o mercado</Text>
+            </View>
+            <Switch
+              value={notifications.news}
+              onValueChange={(value) => handleNotificationChange('news', value)}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={notifications.news ? colors.background : colors.textSecondary}
+            />
+          </View>
+        </View>
+
+        {/* Preferences Section */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Preferências</Text>
+          
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Tema</Text>
+              <Text style={styles.settingDescription}>Escolha o tema do aplicativo</Text>
+            </View>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={preferences.theme}
+                onValueChange={(value) => handlePreferenceChange('theme', value)}
+                style={styles.settingPicker}
+              >
+                <Picker.Item label="Claro" value="light" />
+                <Picker.Item label="Escuro" value="dark" />
+                <Picker.Item label="Automático" value="auto" />
+              </Picker>
+            </View>
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Idioma</Text>
+              <Text style={styles.settingDescription}>Idioma do aplicativo</Text>
+            </View>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={preferences.language}
+                onValueChange={(value) => handlePreferenceChange('language', value)}
+                style={styles.settingPicker}
+              >
+                <Picker.Item label="Português (BR)" value="pt-BR" />
+                <Picker.Item label="English (US)" value="en-US" />
+                <Picker.Item label="Español" value="es" />
+              </Picker>
+            </View>
+          </View>
+
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Moeda</Text>
+              <Text style={styles.settingDescription}>Moeda padrão para exibição</Text>
+            </View>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={preferences.currency}
+                onValueChange={(value) => handlePreferenceChange('currency', value)}
+                style={styles.settingPicker}
+              >
+                <Picker.Item label="Real (BRL)" value="BRL" />
+                <Picker.Item label="Dólar (USD)" value="USD" />
+                <Picker.Item label="Euro (EUR)" value="EUR" />
+              </Picker>
+            </View>
+          </View>
+        </View>
+
+        {/* Security Section */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Segurança</Text>
+          
+          <TouchableOpacity style={styles.settingButton}>
+            <Ionicons name="key-outline" size={24} color={colors.accent} />
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Alterar Senha</Text>
+              <Text style={styles.settingDescription}>Atualize sua senha de acesso</Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingButton}>
+            <Ionicons name="finger-print-outline" size={24} color={colors.accent} />
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Biometria</Text>
+              <Text style={styles.settingDescription}>Configure acesso por biometria</Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingButton}>
+            <Ionicons name="shield-checkmark-outline" size={24} color={colors.accent} />
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Autenticação em Duas Etapas</Text>
+              <Text style={styles.settingDescription}>Adicione uma camada extra de segurança</Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+
+        {/* About Section */}
+        <View style={[styles.card, styles.formCard]}>
+          <Text style={styles.sectionTitle}>Sobre</Text>
+          
+          <TouchableOpacity style={styles.settingButton}>
+            <Ionicons name="information-circle-outline" size={24} color={colors.accent} />
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Versão do App</Text>
+              <Text style={styles.settingDescription}>v1.0.0 (Build 100)</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingButton}>
+            <Ionicons name="document-text-outline" size={24} color={colors.accent} />
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Termos de Uso</Text>
+              <Text style={styles.settingDescription}>Leia nossos termos e condições</Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingButton}>
+            <Ionicons name="shield-outline" size={24} color={colors.accent} />
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingLabel}>Política de Privacidade</Text>
+              <Text style={styles.settingDescription}>Como protegemos seus dados</Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Save Button */}
+        <TouchableOpacity 
+          style={styles.continueButton}
+          onPress={handleSaveSettings}
+        >
+          <Text style={styles.continueButtonText}>
+            Salvar Configurações
+          </Text>
+        </TouchableOpacity>
+
+        {/* Danger Zone */}
+        <View style={[styles.card, styles.dangerCard]}>
+          <Text style={[styles.sectionTitle, styles.dangerTitle]}>Zona de Perigo</Text>
+          
+          <TouchableOpacity 
+            style={styles.dangerButton}
+            onPress={handleDeleteAccount}
+          >
+            <Ionicons name="trash-outline" size={24} color={colors.danger} />
+            <View style={styles.settingInfo}>
+              <Text style={[styles.settingLabel, styles.dangerText]}>Excluir Conta</Text>
+              <Text style={styles.settingDescription}>Esta ação não pode ser desfeita</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -2453,6 +3330,10 @@ function PortfolioStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PortfolioMain" component={PortfolioScreen} />
       <Stack.Screen name="InvestmentDetails" component={InvestmentDetailsScreen} />
+      <Stack.Screen name="BankData" component={BankDataScreen} />
+      <Stack.Screen name="Withdraw" component={WithdrawScreen} />
+      <Stack.Screen name="Tax" component={TaxScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );
 }
@@ -5222,8 +6103,68 @@ const styles = StyleSheet.create({
   },
   instructionText: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 14,
     color: colors.textSecondary,
     lineHeight: 22,
+  },
+
+  // Settings Screen Styles
+  settingItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  settingInfo: {
+    flex: 1,
+    marginRight: 16,
+  },
+  settingLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 4,
+  },
+  settingDescription: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 18,
+  },
+  pickerContainer: {
+    backgroundColor: colors.card2,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    minWidth: 120,
+  },
+  settingPicker: {
+    height: 40,
+    color: colors.text,
+  },
+  settingButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    gap: 16,
+  },
+  dangerCard: {
+    borderColor: '#FEE2E2',
+    backgroundColor: '#FFFBFB',
+  },
+  dangerTitle: {
+    color: '#DC2626',
+  },
+  dangerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    gap: 16,
+  },
+  dangerText: {
+    color: '#DC2626',
   },
 });
