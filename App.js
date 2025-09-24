@@ -363,7 +363,32 @@ function InvestmentConfirmationScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={() => navigation.navigate('OpportunityDetails')}
+          onPress={() => navigation.navigate('OpportunityDetails', {
+            opportunity: {
+              id: 1,
+              name: 'Fundo Imobiliário XP LOG',
+              type: 'FII',
+              category: 'Logística',
+              risk: 'Médio',
+              minInvestment: 100,
+              expectedReturn: '12,5% a.a.',
+              description: 'Fundo de investimento imobiliário focado em galpões logísticos em regiões estratégicas.',
+              manager: 'XP Asset Management',
+              patrimony: 'R$ 2,1 bilhões',
+              dividend: 'R$ 0,85 por cota',
+              lastDividend: '2024-01-15',
+              price: 98.50,
+              variation: '+2.3%',
+              variationType: 'positive',
+              liquidity: 'D+1',
+              composition: [
+                { name: 'Galpões SP', percentage: 35, color: '#3B82F6' },
+                { name: 'Centros RJ', percentage: 25, color: '#10B981' },
+                { name: 'Armazéns MG', percentage: 20, color: '#F59E0B' },
+                { name: 'Outros', percentage: 20, color: '#8B5CF6' }
+              ]
+            }
+          })}
         >
           <Text style={styles.continueButtonText}>Voltar aos Detalhes</Text>
           <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
@@ -419,11 +444,39 @@ const colors = {
 
 // ---------------- Opportunity Details Screen ----------------
 function OpportunityDetailsScreen({ route, navigation }) {
-  const { opportunity } = route.params;
+  const { opportunity } = route.params || {};
+
+  // Se não há opportunity, usar dados mock padrão
+  const defaultOpportunity = {
+    id: 1,
+    name: 'Fundo Imobiliário XP LOG',
+    type: 'FII',
+    category: 'Logística',
+    risk: 'Médio',
+    minInvestment: 100,
+    expectedReturn: '12,5% a.a.',
+    description: 'Fundo de investimento imobiliário focado em galpões logísticos em regiões estratégicas.',
+    manager: 'XP Asset Management',
+    patrimony: 'R$ 2,1 bilhões',
+    dividend: 'R$ 0,85 por cota',
+    lastDividend: '2024-01-15',
+    price: 98.50,
+    variation: '+2.3%',
+    variationType: 'positive',
+    liquidity: 'D+1',
+    composition: [
+      { name: 'Galpões SP', percentage: 35, color: '#3B82F6' },
+      { name: 'Centros RJ', percentage: 25, color: '#10B981' },
+      { name: 'Armazéns MG', percentage: 20, color: '#F59E0B' },
+      { name: 'Outros', percentage: 20, color: '#8B5CF6' }
+    ]
+  };
+
+  const currentOpportunity = opportunity || defaultOpportunity;
 
   // Dados mock expandidos para a oportunidade
   const opportunityDetails = {
-    ...opportunity,
+    ...currentOpportunity,
     capa: 'https://via.placeholder.com/400x200/04a2fa/ffffff?text=Projeto+Imobiliário',
     rentabilidadeAlvo: '12,5% a.a.',
     investimentoMinimo: 'R$ 1.000',
@@ -732,11 +785,35 @@ function OpportunityDetailsScreen({ route, navigation }) {
 }
 
 function InvestmentDetailsScreen({ route, navigation }) {
-  const { investment } = route.params;
+  const params = route.params || {};
+  const { investment } = params;
+  
+  // Dados mock padrão caso investment não seja fornecido
+  const defaultInvestment = {
+    nome: 'Investimento Exemplo',
+    tipo: 'Renda Fixa',
+    categoria: 'CDB',
+    risco: 'Baixo',
+    retornoEsperado: '12% a.a.',
+    descricao: 'Investimento seguro com boa rentabilidade.',
+    gerente: 'João Silva',
+    patrimonio: 'R$ 50.000.000',
+    dividendo: '8% a.a.',
+    preco: 'R$ 100,00',
+    variacao: '+2,5%',
+    liquidez: 'D+1',
+    composicao: [
+      { nome: 'Títulos Públicos', percentual: 60, cor: '#3B82F6' },
+      { nome: 'CDBs', percentual: 30, cor: '#10B981' },
+      { nome: 'Debêntures', percentual: 10, cor: '#F59E0B' }
+    ]
+  };
+  
+  const currentInvestment = investment || defaultInvestment;
 
   // Dados mock expandidos para o investimento
   const investmentDetails = {
-    ...investment,
+    ...currentInvestment,
     capa: 'https://via.placeholder.com/400x200/04a2fa/ffffff?text=Meu+Investimento',
     rentabilidadeAtual: '8,2% a.a.',
     valorInvestido: 'R$ 5.000',
