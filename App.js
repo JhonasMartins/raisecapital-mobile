@@ -3980,6 +3980,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
   investmentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: colors.card,
     paddingHorizontal: 20,
     paddingVertical: 16,
@@ -3994,7 +3997,8 @@ const styles = StyleSheet.create({
   investmentHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: 16,
   },
   investmentBackButton: {
     padding: 8,
@@ -4007,7 +4011,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     letterSpacing: -0.3,
     flex: 1,
-    marginLeft: 16,
   },
   investmentTitleContainer: {
     flexDirection: 'row',
