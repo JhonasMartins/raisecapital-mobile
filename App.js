@@ -511,7 +511,7 @@ function InvestmentConfirmationScreen({ navigation }) {
                 [
                   {
                     text: 'OK',
-                    onPress: () => navigation.navigate('Invest')
+                    onPress: () => navigation.navigate('Portfolio')
                   }
                 ]
               );
@@ -4436,14 +4436,7 @@ const styles = StyleSheet.create({
   investmentHeaderSection: {
     marginBottom: 32,
   },
-  investmentHeaderTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: 8,
-    letterSpacing: -0.8,
-  },
+
   investmentHeaderSubtitle: {
     fontSize: 16,
     color: colors.textSecondary,
@@ -4589,14 +4582,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     paddingHorizontal: 4,
   },
-  investmentHeaderTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: colors.text,
-    marginBottom: 8,
-    letterSpacing: -0.5,
-    textAlign: 'center',
-  },
+
   investmentHeaderSubtitle: {
     fontSize: 16,
     color: colors.textSecondary,
