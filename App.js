@@ -2129,6 +2129,7 @@ function PortfolioScreen({ navigation }) {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.topbar}>
+          <Image source={require('./assets/logo.png')} style={styles.headerLogo} />
           <Text style={styles.topbarTitle}>Meu Portfolio</Text>
           <View style={styles.topbarIcons}>
             <TouchableOpacity style={styles.iconButton}>
