@@ -1533,6 +1533,39 @@ function WalletScreen() {
           </TouchableOpacity>
         </View>
 
+
+
+        {/* Card Ações Rápidas */}
+        <View style={[styles.card, styles.quickActionsCard]}>
+          <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+          <View style={styles.quickActionsGrid}>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.accentLight }]}>
+                <Ionicons name="add-outline" size={24} color={colors.accent} />
+              </View>
+              <Text style={styles.quickActionText}>Investir</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: '#E8F5E8' }]}>
+                <Ionicons name="arrow-down-outline" size={24} color="#10B981" />
+              </View>
+              <Text style={styles.quickActionText}>Depositar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: '#FEF3C7' }]}>
+                <Ionicons name="arrow-up-outline" size={24} color="#F59E0B" />
+              </View>
+              <Text style={styles.quickActionText}>Sacar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: '#EDE9FE' }]}>
+                <Ionicons name="document-text-outline" size={24} color="#8B5CF6" />
+              </View>
+              <Text style={styles.quickActionText}>Extrato</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Card principal com gráfico */}
         <View style={[styles.card, styles.mainCard]}>
           <View style={styles.chartContainer}>
@@ -2290,59 +2323,7 @@ function ProfileScreen() {
           </View>
         </View>
 
-        {/* Balance Card */}
-        <View style={[styles.card, styles.balanceCard]}>
-          <View style={styles.balanceHeader}>
-            <Text style={styles.balanceTitle}>Saldo Total</Text>
-            <TouchableOpacity 
-              style={styles.eyeButton}
-              onPress={() => setShowBalance(!showBalance)}
-            >
-              <Ionicons 
-                name={showBalance ? "eye-outline" : "eye-off-outline"} 
-                size={18} 
-                color={colors.text} 
-              />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.balanceValue}>
-            {showBalance ? "R$ 127.450,00" : "R$ ••••••"}
-          </Text>
-          <Text style={styles.balanceSubtitle}>
-            Rendimento total: <Text style={styles.balanceProfit}>+R$ 12.450,00</Text>
-          </Text>
-        </View>
 
-        {/* Quick Actions */}
-        <View style={[styles.card, styles.actionsCard]}>
-          <Text style={styles.sectionTitle}>Ações Rápidas</Text>
-          <View style={styles.actionsGrid}>
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: colors.accentLight }]}>
-                <Ionicons name="add-outline" size={24} color={colors.accent} />
-              </View>
-              <Text style={styles.actionText}>Investir</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: '#dcfce7' }]}>
-                <Ionicons name="arrow-down-outline" size={24} color="#16a34a" />
-              </View>
-              <Text style={styles.actionText}>Depositar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: '#fef3c7' }]}>
-                <Ionicons name="arrow-up-outline" size={24} color="#d97706" />
-              </View>
-              <Text style={styles.actionText}>Sacar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={[styles.actionIcon, { backgroundColor: '#e0e7ff' }]}>
-                <Ionicons name="document-text-outline" size={24} color="#4f46e5" />
-              </View>
-              <Text style={styles.actionText}>Extrato</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
 
         {/* Account Info */}
         <View style={[styles.card, styles.accountCard]}>
@@ -3843,6 +3824,34 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   actionText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  
+  // Estilos para o card de Ações Rápidas
+  quickActionsCard: {
+    marginBottom: 16,
+  },
+  quickActionsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  quickActionItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  quickActionIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  quickActionText: {
     fontSize: 12,
     fontWeight: '500',
     color: colors.textSecondary,
