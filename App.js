@@ -412,7 +412,7 @@ function InvestmentConfirmationScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.containerWithNavbar}>
+      <ScrollView style={styles.scrollViewWithNavbar}>
         <View style={styles.card}>
           <View style={styles.successIcon}>
             <Ionicons name="checkmark-circle" size={64} color="#10B981" />
@@ -468,9 +468,9 @@ function InvestmentConfirmationScreen({ navigation }) {
           </View>
         </View>
 
-        <View style={styles.continueButtonContainer}>
+        <View style={styles.confirmationButtonsContainer}>
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[styles.continueButton, styles.secondaryButton]}
             onPress={() => navigation.navigate('OpportunityDetails', {
               opportunity: {
                 id: 1,
@@ -498,8 +498,27 @@ function InvestmentConfirmationScreen({ navigation }) {
               }
             })}
           >
-            <Text style={styles.continueButtonText}>Voltar aos Detalhes</Text>
-            <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={20} color={colors.accent} />
+            <Text style={[styles.continueButtonText, styles.secondaryButtonText]}>Voltar aos Detalhes</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={() => {
+              Alert.alert(
+                'Investimento Finalizado',
+                'Seu processo de investimento foi concluído com sucesso! Você receberá atualizações por email.',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => navigation.navigate('Invest')
+                  }
+                ]
+              );
+            }}
+          >
+            <Text style={styles.continueButtonText}>Sair</Text>
+            <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -660,7 +679,7 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
   // Tab Visão Geral
   const OverviewTab = () => (
-    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollViewWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Capa */}
       <View style={styles.coverContainer}>
         <View style={styles.coverPlaceholder}>
@@ -737,7 +756,7 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
   // Tab Detalhes
   const DetailsTab = () => (
-    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollViewWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Sobre a Operação */}
       <InfoCard title="Sobre a Operação">
         <Text style={styles.contentText}>{opportunityDetails.sobreOperacao}</Text>
@@ -775,7 +794,7 @@ function OpportunityDetailsScreen({ route, navigation }) {
 
   // Tab Documentos
   const DocumentsTab = () => (
-    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollViewWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Documentos Jurídicos */}
       <InfoCard title="Documentos Jurídicos">
         {opportunityDetails.documentosJuridicos.map((doc, index) => (
@@ -999,7 +1018,7 @@ function InvestmentDetailsScreen({ route, navigation }) {
 
   // Tab Visão Geral
   const OverviewTab = () => (
-    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollViewWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Capa */}
       <View style={styles.coverContainer}>
         <View style={styles.coverPlaceholder}>
@@ -1080,7 +1099,7 @@ function InvestmentDetailsScreen({ route, navigation }) {
 
   // Tab Detalhes
   const DetailsTab = () => (
-    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollViewWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Sobre o Investimento */}
       <InfoCard title="Sobre o Investimento">
         <Text style={styles.contentText}>{investmentDetails.sobreInvestimento}</Text>
@@ -4810,6 +4829,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 100, // Increased padding to accommodate navbar
   },
+  confirmationButtonsContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 100,
+    gap: 12,
+  },
   continueButton: {
     backgroundColor: colors.accent,
     flexDirection: 'row',
@@ -4825,15 +4849,25 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
+  secondaryButton: {
+    backgroundColor: colors.card,
+    borderWidth: 2,
+    borderColor: colors.accent,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.1,
+  },
   continueButtonDisabled: {
     backgroundColor: colors.cardBorder,
     shadowOpacity: 0,
   },
   continueButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: -0.2,
+  },
+  secondaryButtonText: {
+    color: colors.accent,
   },
   continueButtonTextDisabled: {
     color: colors.sub,
