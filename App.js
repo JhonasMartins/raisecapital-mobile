@@ -68,7 +68,6 @@ function InvestmentAmountScreen({ navigation }) {
         >
           {/* Header Section */}
           <View style={styles.investmentHeaderSection}>
-            <Text style={styles.investmentHeaderTitle}>Quanto você deseja investir?</Text>
             <Text style={styles.investmentHeaderSubtitle}>
               Defina o valor que você gostaria de investir nesta oportunidade
             </Text>
@@ -246,7 +245,6 @@ function InvestorProfileScreen({ navigation }) {
 
       <ScrollView style={styles.scrollViewWithNavbar}>
         <View style={styles.card}>
-          <Text style={styles.investmentTitle}>Declaração e Perfil de Investidor</Text>
           <Text style={styles.investmentSubtitle}>
             Complete as informações sobre seu perfil de investimento
           </Text>
@@ -4009,6 +4007,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     letterSpacing: -0.3,
     flex: 1,
+    marginLeft: 16,
   },
   investmentTitleContainer: {
     flexDirection: 'row',
