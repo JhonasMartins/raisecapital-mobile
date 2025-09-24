@@ -287,9 +287,9 @@ function InvestorProfileScreen({ navigation }) {
 function InvestmentConfirmationScreen({ navigation }) {
   const [paymentLink] = useState('https://pay.example.com/investment-123456');
 
-  const copyToClipboard = () => {
-    // Em um app real, você usaria Clipboard.setString(paymentLink)
-    Alert.alert('Link copiado!', 'O link de pagamento foi copiado para a área de transferência.');
+  const launchPayment = () => {
+    // Em um app real, você usaria Linking.openURL(paymentLink)
+    Alert.alert('Redirecionando...', 'Você será redirecionado para a página de pagamento.');
   };
 
   return (
@@ -323,10 +323,11 @@ function InvestmentConfirmationScreen({ navigation }) {
                 {paymentLink}
               </Text>
               <TouchableOpacity
-                style={styles.copyButton}
-                onPress={copyToClipboard}
+                style={styles.launchButton}
+                onPress={launchPayment}
               >
-                <Ionicons name="copy-outline" size={20} color={colors.accent} />
+                <Ionicons name="open-outline" size={20} color="#FFFFFF" />
+                <Text style={styles.launchButtonText}>Launch</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -4404,12 +4405,25 @@ const styles = StyleSheet.create({
     fontFamily: 'monospace',
     lineHeight: 20,
   },
-  copyButton: {
-    padding: 8,
+  launchButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: colors.accentLight,
-    borderWidth: 1,
-    borderColor: colors.accent + '30',
+    backgroundColor: colors.accent,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  launchButtonText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: -0.1,
   },
   instructionsContainer: {
     marginBottom: 32,
