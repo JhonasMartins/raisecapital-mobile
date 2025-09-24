@@ -335,14 +335,16 @@ function InvestorProfileScreen({ navigation }) {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={[styles.continueButton, !isFormValid() && styles.continueButtonDisabled]}
-          onPress={() => isFormValid() && navigation.navigate('InvestmentConfirmation')}
-          disabled={!isFormValid()}
-        >
-          <Text style={styles.continueButtonText}>Avançar</Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-        </TouchableOpacity>
+        <View style={styles.continueButtonContainer}>
+          <TouchableOpacity
+            style={[styles.continueButton, !isFormValid() && styles.continueButtonDisabled]}
+            onPress={() => isFormValid() && navigation.navigate('InvestmentConfirmation')}
+            disabled={!isFormValid()}
+          >
+            <Text style={styles.continueButtonText}>Avançar</Text>
+            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
       {/* Modal do Termo de Ciência de Risco */}
@@ -469,38 +471,40 @@ function InvestmentConfirmationScreen({ navigation }) {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={() => navigation.navigate('OpportunityDetails', {
-            opportunity: {
-              id: 1,
-              name: 'Fundo Imobiliário XP LOG',
-              type: 'FII',
-              category: 'Logística',
-              risk: 'Médio',
-              minInvestment: 100,
-              expectedReturn: '12,5% a.a.',
-              description: 'Fundo de investimento imobiliário focado em galpões logísticos em regiões estratégicas.',
-              manager: 'XP Asset Management',
-              patrimony: 'R$ 2,1 bilhões',
-              dividend: 'R$ 0,85 por cota',
-              lastDividend: '2024-01-15',
-              price: 98.50,
-              variation: '+2.3%',
-              variationType: 'positive',
-              liquidity: 'D+1',
-              composition: [
-                { name: 'Galpões SP', percentage: 35, color: '#3B82F6' },
-                { name: 'Centros RJ', percentage: 25, color: '#10B981' },
-                { name: 'Armazéns MG', percentage: 20, color: '#F59E0B' },
-                { name: 'Outros', percentage: 20, color: '#8B5CF6' }
-              ]
-            }
-          })}
-        >
-          <Text style={styles.continueButtonText}>Voltar aos Detalhes</Text>
-          <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
-        </TouchableOpacity>
+        <View style={styles.continueButtonContainer}>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={() => navigation.navigate('OpportunityDetails', {
+              opportunity: {
+                id: 1,
+                name: 'Fundo Imobiliário XP LOG',
+                type: 'FII',
+                category: 'Logística',
+                risk: 'Médio',
+                minInvestment: 100,
+                expectedReturn: '12,5% a.a.',
+                description: 'Fundo de investimento imobiliário focado em galpões logísticos em regiões estratégicas.',
+                manager: 'XP Asset Management',
+                patrimony: 'R$ 2,1 bilhões',
+                dividend: 'R$ 0,85 por cota',
+                lastDividend: '2024-01-15',
+                price: 98.50,
+                variation: '+2.3%',
+                variationType: 'positive',
+                liquidity: 'D+1',
+                composition: [
+                  { name: 'Galpões SP', percentage: 35, color: '#3B82F6' },
+                  { name: 'Centros RJ', percentage: 25, color: '#10B981' },
+                  { name: 'Armazéns MG', percentage: 20, color: '#F59E0B' },
+                  { name: 'Outros', percentage: 20, color: '#8B5CF6' }
+                ]
+              }
+            })}
+          >
+            <Text style={styles.continueButtonText}>Voltar aos Detalhes</Text>
+            <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -4807,7 +4811,7 @@ const styles = StyleSheet.create({
   },
   continueButtonContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 100, // Increased padding to accommodate navbar
   },
   continueButton: {
     backgroundColor: colors.accent,
