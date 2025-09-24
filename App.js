@@ -3079,12 +3079,6 @@ const styles = StyleSheet.create({
   investmentCard: {
     marginBottom: 16,
   },
-  investmentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
   investmentInfo: {
     flex: 1,
   },
