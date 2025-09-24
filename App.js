@@ -71,25 +71,18 @@ function InvestmentAmountScreen({ navigation }) {
         >
           {/* Header Section */}
           <View style={styles.investmentHeaderSection}>
-            <View style={styles.investmentTitleContainer}>
-              <View style={styles.investmentIconContainer}>
-                <Ionicons name="wallet" size={32} color={colors.accent} />
-              </View>
-              <View style={styles.investmentTitleTextContainer}>
-                <Text style={styles.investmentTitle}>Quanto você deseja investir?</Text>
-                <Text style={styles.investmentSubtitle}>
-                  Defina o valor que você gostaria de investir nesta oportunidade
-                </Text>
-              </View>
-            </View>
+            <Text style={styles.investmentHeaderTitle}>Quanto você deseja investir?</Text>
+            <Text style={styles.investmentHeaderSubtitle}>
+              Defina o valor que você gostaria de investir nesta oportunidade
+            </Text>
           </View>
 
           {/* Amount Input Section */}
-          <View style={styles.amountSection}>
+          <View style={styles.investmentAmountSection}>
             <View style={[
-              styles.amountInputContainer,
-              inputFocused && styles.amountInputContainerFocused,
-              !isValidAmount && amount && styles.amountInputContainerError
+              styles.investmentAmountCard,
+              inputFocused && styles.investmentAmountCardFocused,
+              !isValidAmount && amount && styles.investmentAmountCardError
             ]}>
               <Text style={styles.currencySymbol}>R$</Text>
               <TextInput
@@ -126,34 +119,36 @@ function InvestmentAmountScreen({ navigation }) {
           </View>
 
           {/* Suggested Values Section */}
-          <View style={styles.suggestedSection}>
-            <Text style={styles.suggestedTitle}>Valores sugeridos</Text>
-            <View style={styles.suggestedGrid}>
-              {suggestedValues.map((item) => (
-                <TouchableOpacity
-                  key={item.value}
-                  style={[
-                    styles.suggestedButton,
-                    selectedSuggestion === item.value && styles.suggestedButtonSelected
-                  ]}
-                  onPress={() => handleSuggestionPress(item.value)}
-                >
-                  <Text style={[
-                    styles.suggestedButtonText,
-                    selectedSuggestion === item.value && styles.suggestedButtonTextSelected
-                  ]}>
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+          <View style={styles.investmentSuggestedSection}>
+            <View style={styles.suggestedValuesCard}>
+              <Text style={styles.suggestedValuesTitle}>Valores sugeridos</Text>
+              <View style={styles.suggestedValuesGrid}>
+                {suggestedValues.map((item) => (
+                  <TouchableOpacity
+                    key={item.value}
+                    style={[
+                      styles.suggestedValueButton,
+                      selectedSuggestion === item.value && styles.suggestedValueButtonSelected
+                    ]}
+                    onPress={() => handleSuggestionPress(item.value)}
+                  >
+                    <Text style={[
+                      styles.suggestedValueText,
+                      selectedSuggestion === item.value && styles.suggestedValueTextSelected
+                    ]}>
+                      {item.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           </View>
 
           {/* Investment Info Section */}
           {isValidAmount && (
             <View style={styles.investmentInfoSection}>
-              <Text style={styles.investmentInfoTitle}>Informações do investimento</Text>
-              <View style={styles.investmentInfoContainer}>
+              <View style={styles.investmentInfoCard}>
+                <Text style={styles.investmentInfoTitle}>Informações do investimento</Text>
                 <View style={styles.investmentInfoRow}>
                   <View style={styles.investmentInfoIconContainer}>
                     <Ionicons name="trending-up" size={18} color={colors.accent} />
@@ -4575,13 +4570,162 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   
-  investmentInfoContainer: {
+  // Novos estilos para as seções reorganizadas
+  investmentHeaderSection: {
+    marginBottom: 32,
+    paddingHorizontal: 4,
+  },
+  investmentHeaderTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.text,
+    marginBottom: 8,
+    letterSpacing: -0.5,
+    textAlign: 'center',
+  },
+  investmentHeaderSubtitle: {
+    fontSize: 16,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 24,
+    paddingHorizontal: 16,
+  },
+  investmentAmountSection: {
+    marginBottom: 32,
+  },
+  investmentSuggestedSection: {
+    marginBottom: 32,
+  },
+  investmentInfoSection: {
+    marginBottom: 20,
+  },
+  
+  // Estilos aprimorados para o cartão de entrada de valor
+  investmentAmountCard: {
+    backgroundColor: colors.card,
+    borderRadius: 20,
+    padding: 24,
+    borderWidth: 2,
+    borderColor: colors.cardBorder,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+    marginBottom: 16,
+  },
+  investmentAmountCardFocused: {
+    borderColor: colors.accent,
     backgroundColor: colors.accentLight,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 6,
+  },
+  investmentAmountCardError: {
+    borderColor: '#EF4444',
+    backgroundColor: '#FEF2F2',
+  },
+  currencySymbol: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.accent,
+    marginRight: 12,
+    letterSpacing: -0.5,
+  },
+  amountInput: {
+    flex: 1,
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.text,
+    letterSpacing: -0.8,
+    textAlign: 'left',
+  },
+  
+  // Estilos para valores sugeridos
+  suggestedValuesCard: {
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
-    marginTop: 8,
     borderWidth: 1,
-    borderColor: colors.accent + '20',
+    borderColor: colors.cardBorder,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  suggestedValuesTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 16,
+    letterSpacing: -0.3,
+  },
+  suggestedValuesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  suggestedValueButton: {
+    backgroundColor: colors.card2,
+    borderWidth: 1.5,
+    borderColor: colors.cardBorder,
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    flex: 1,
+    minWidth: '22%',
+    alignItems: 'center',
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  suggestedValueButtonSelected: {
+    backgroundColor: colors.accentLight,
+    borderColor: colors.accent,
+    borderWidth: 2,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 4,
+    transform: [{ scale: 1.02 }],
+  },
+  suggestedValueText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  suggestedValueTextSelected: {
+    color: colors.accent,
+    fontSize: 16,
+  },
+  
+  // Estilos aprimorados para informações de investimento
+  investmentInfoCard: {
+    backgroundColor: colors.accentLight,
+    borderRadius: 16,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: colors.accent + '30',
+    shadowColor: colors.accent,
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
+  },
+  investmentInfoTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 16,
+    letterSpacing: -0.2,
   },
   investmentInfoRow: {
     flexDirection: 'row',
@@ -4589,9 +4733,74 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     gap: 12,
   },
-  investmentInfoText: {
+  investmentInfoIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.card,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  investmentInfoTextContainer: {
+    flex: 1,
+  },
+  investmentInfoLabel: {
     fontSize: 14,
     color: colors.textSecondary,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  investmentInfoValue: {
+    fontSize: 15,
+    color: colors.text,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  investmentInfoDivider: {
+    height: 1,
+    backgroundColor: colors.accent + '20',
+    marginVertical: 12,
+  },
+  
+  // Estilos para validação e avisos
+  validationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FEF2F2',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#FECACA',
+    marginBottom: 16,
+  },
+  validationText: {
+    fontSize: 14,
+    color: '#DC2626',
+    fontWeight: '500',
+    flex: 1,
+  },
+  warningContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FFFBEB',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#FED7AA',
+    marginBottom: 16,
+  },
+  warningText: {
+    fontSize: 14,
+    color: '#D97706',
     fontWeight: '500',
     flex: 1,
     lineHeight: 20,
