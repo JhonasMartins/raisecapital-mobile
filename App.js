@@ -544,6 +544,7 @@ import {
   TextInput,
   Alert,
   Image,
+  Switch,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -2392,7 +2393,7 @@ function ProfileScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.menuItem}
-            onPress={() => navigation.navigate('BankData')}
+            onPress={() => navigation.push('BankData')}
           >
             <Ionicons name="card-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Dados Bancários</Text>
@@ -2400,7 +2401,7 @@ function ProfileScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.menuItem}
-            onPress={() => navigation.navigate('Withdraw')}
+            onPress={() => navigation.push('Withdraw')}
           >
             <Ionicons name="arrow-up-circle-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Resgate</Text>
@@ -2408,7 +2409,7 @@ function ProfileScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.menuItem}
-            onPress={() => navigation.navigate('Tax')}
+            onPress={() => navigation.push('Tax')}
           >
             <Ionicons name="document-text-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Imposto de Renda</Text>
@@ -2416,7 +2417,7 @@ function ProfileScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.menuItem}
-            onPress={() => navigation.navigate('Settings')}
+            onPress={() => navigation.push('Settings')}
           >
             <Ionicons name="settings-outline" size={24} color={colors.accent} />
             <Text style={styles.menuText}>Configurações</Text>
@@ -3330,6 +3331,14 @@ function PortfolioStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PortfolioMain" component={PortfolioScreen} />
       <Stack.Screen name="InvestmentDetails" component={InvestmentDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ProfileMain" component={ProfileScreen} />
       <Stack.Screen name="BankData" component={BankDataScreen} />
       <Stack.Screen name="Withdraw" component={WithdrawScreen} />
       <Stack.Screen name="Tax" component={TaxScreen} />
@@ -3464,7 +3473,7 @@ export default function App() {
         />
         <Tab.Screen
           name="Perfil"
-          component={ProfileScreen}
+          component={ProfileStack}
           options={{
             tabBarIcon: ({ color, focused }) => (
               <View style={styles.modernTabContainer}>
