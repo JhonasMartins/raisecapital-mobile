@@ -509,7 +509,15 @@ function InvestmentConfirmationScreen({ navigation }) {
                 [
                   {
                     text: 'OK',
-                    onPress: () => navigation.navigate('Portfolio')
+                    onPress: () => {
+                      // Reset the InvestStack to go back to the main invest screen
+                      navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'InvestMain' }],
+                      });
+                      // Navigate to Portfolio tab
+                      navigation.getParent()?.navigate('Portfolio');
+                    }
                   }
                 ]
               );
@@ -1535,36 +1543,7 @@ function WalletScreen() {
 
 
 
-        {/* Card Ações Rápidas */}
-        <View style={[styles.card, styles.quickActionsCard]}>
-          <Text style={styles.sectionTitle}>Ações Rápidas</Text>
-          <View style={styles.quickActionsGrid}>
-            <TouchableOpacity style={styles.quickActionItem}>
-              <View style={[styles.quickActionIcon, { backgroundColor: colors.accentLight }]}>
-                <Ionicons name="add-outline" size={24} color={colors.accent} />
-              </View>
-              <Text style={styles.quickActionText}>Investir</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.quickActionItem}>
-              <View style={[styles.quickActionIcon, { backgroundColor: '#E8F5E8' }]}>
-                <Ionicons name="arrow-down-outline" size={24} color="#10B981" />
-              </View>
-              <Text style={styles.quickActionText}>Depositar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.quickActionItem}>
-              <View style={[styles.quickActionIcon, { backgroundColor: '#FEF3C7' }]}>
-                <Ionicons name="arrow-up-outline" size={24} color="#F59E0B" />
-              </View>
-              <Text style={styles.quickActionText}>Sacar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.quickActionItem}>
-              <View style={[styles.quickActionIcon, { backgroundColor: '#EDE9FE' }]}>
-                <Ionicons name="document-text-outline" size={24} color="#8B5CF6" />
-              </View>
-              <Text style={styles.quickActionText}>Extrato</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+
 
         {/* Card principal com gráfico */}
         <View style={[styles.card, styles.mainCard]}>
@@ -1625,6 +1604,37 @@ function WalletScreen() {
               </View>
             ))}
           </ScrollView>
+        </View>
+
+        {/* Card Ações Rápidas */}
+        <View style={[styles.card, styles.quickActionsCard]}>
+          <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+          <View style={styles.quickActionsGrid}>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.accentLight }]}>
+                <Ionicons name="add-outline" size={24} color={colors.accent} />
+              </View>
+              <Text style={styles.quickActionText}>Investir</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: '#E8F5E8' }]}>
+                <Ionicons name="arrow-down-outline" size={24} color="#10B981" />
+              </View>
+              <Text style={styles.quickActionText}>Depositar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: '#FEF3C7' }]}>
+                <Ionicons name="arrow-up-outline" size={24} color="#F59E0B" />
+              </View>
+              <Text style={styles.quickActionText}>Sacar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickActionItem}>
+              <View style={[styles.quickActionIcon, { backgroundColor: '#EDE9FE' }]}>
+                <Ionicons name="document-text-outline" size={24} color="#8B5CF6" />
+              </View>
+              <Text style={styles.quickActionText}>Extrato</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Card de estado vazio */}
