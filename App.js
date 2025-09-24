@@ -1653,6 +1653,7 @@ function InvestScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
         {/* Header */}
         <View style={styles.topbar}>
+          <Image source={require('./assets/logo.png')} style={styles.headerLogo} />
           <Text style={styles.topbarTitle}>Investir</Text>
           <View style={styles.topbarIcons}>
             <TouchableOpacity style={styles.iconButton}>
@@ -1707,7 +1708,11 @@ function WalletScreen() {
       <ScrollView contentContainerStyle={styles.containerWithNavbar}>
         {/* Header superior elegante */}
         <View style={styles.topbar}>
-          <View style={{ width: 28 }} />
+          <Image 
+            source={require('./assets/logo.png')} 
+            style={styles.headerLogo}
+            resizeMode="contain"
+          />
           <Text style={styles.topbarTitle}>Minha Carteira</Text>
           <View style={styles.topbarIcons}>
             <TouchableOpacity style={styles.iconButton}>
