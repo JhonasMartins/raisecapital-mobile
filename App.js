@@ -1137,7 +1137,7 @@ function InvestmentDetailsScreen({ route, navigation }) {
 
   // Tab Documentos
   const DocumentsTab = () => (
-    <ScrollView style={styles.containerWithNavbar} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.scrollViewWithNavbar} showsVerticalScrollIndicator={false}>
       {/* Documentos do Investimento */}
       <InfoCard title="Documentos do Investimento">
         {investmentDetails.documentosJuridicos.map((doc, index) => (
@@ -1496,7 +1496,7 @@ function WalletScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
-      <ScrollView contentContainerStyle={styles.containerWithNavbar}>
+      <ScrollView contentContainerStyle={styles.scrollViewWithNavbar}>
         {/* Header superior elegante */}
         <View style={styles.topbar}>
           <Text style={styles.topbarTitle}>Minha Carteira</Text>
