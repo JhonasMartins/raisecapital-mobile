@@ -1708,11 +1708,6 @@ function WalletScreen() {
       <ScrollView contentContainerStyle={styles.containerWithNavbar}>
         {/* Header superior elegante */}
         <View style={styles.topbar}>
-          <Image 
-            source={require('./assets/logo.png')} 
-            style={styles.headerLogo}
-            resizeMode="contain"
-          />
           <Text style={styles.topbarTitle}>Minha Carteira</Text>
           <View style={styles.topbarIcons}>
             <TouchableOpacity style={styles.iconButton}>
@@ -2847,6 +2842,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     borderWidth: 2,
     borderColor: colors.card2,
+  },
+
+  // Header Logo
+  headerLogo: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
   },
 
   // Cards base
