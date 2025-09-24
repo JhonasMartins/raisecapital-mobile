@@ -2386,6 +2386,57 @@ function ProfileScreen() {
             <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
           </TouchableOpacity>
         </View>
+
+        {/* Menu Links */}
+        <View style={[styles.card, styles.menuCard]}>
+          <Text style={styles.sectionTitle}>Menu</Text>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="person-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Perfil</Text>
+            <Text style={styles.menuSubText}>(para edição)</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="card-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Dados Bancários</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="arrow-up-circle-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Resgate</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="document-text-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Imposto de Renda</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="settings-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Configurações</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="help-circle-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Dúvidas Frequentes</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="people-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Indique um amigo</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="shield-checkmark-outline" size={24} color={colors.accent} />
+            <Text style={styles.menuText}>Legal</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Ionicons name="log-out-outline" size={24} color="#EF4444" />
+            <Text style={[styles.menuText, { color: '#EF4444' }]}>Sair da conta</Text>
+            <Ionicons name="chevron-forward-outline" size={20} color={colors.sub} />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -3839,6 +3890,31 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: '500',
     marginLeft: 12,
+  },
+
+  // Menu Card Styles
+  menuCard: {
+    marginBottom: 32,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.cardBorder,
+  },
+  menuText: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: '500',
+    marginLeft: 12,
+  },
+  menuSubText: {
+    fontSize: 14,
+    color: colors.sub,
+    fontWeight: '400',
+    marginLeft: 4,
   },
 
   // Estilos dos Cards de Investidores
