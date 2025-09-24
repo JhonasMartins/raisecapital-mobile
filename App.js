@@ -4,6 +4,8 @@ import { KeyboardAvoidingView, Modal } from 'react-native';
 // Páginas do Processo de Investimento
 function InvestmentAmountScreen({ navigation }) {
   const [amount, setAmount] = useState('');
+  const [inputFocused, setInputFocused] = useState(false);
+  const [selectedSuggestion, setSelectedSuggestion] = useState(null);
 
   const formatCurrency = (value) => {
     const numericValue = value.replace(/[^\d]/g, '');
@@ -14,10 +16,34 @@ function InvestmentAmountScreen({ navigation }) {
     return formattedValue;
   };
 
+  const getNumericValue = (formattedValue) => {
+    return parseFloat(formattedValue.replace(/[^\d]/g, '')) / 100;
+  };
+
   const handleAmountChange = (text) => {
     const formatted = formatCurrency(text);
     setAmount(formatted);
+    setSelectedSuggestion(null);
   };
+
+  const handleSuggestionPress = (value) => {
+    const formatted = formatCurrency(value + '00');
+    setAmount(formatted);
+    setSelectedSuggestion(value);
+  };
+
+  const numericAmount = getNumericValue(amount);
+  const isValidAmount = numericAmount >= 100; // Valor mínimo de R$ 100
+  const isHighAmount = numericAmount >= 50000; // Valor alto para mostrar aviso
+
+  const suggestedValues = [
+    { value: '500', label: 'R$ 500' },
+    { value: '1000', label: 'R$ 1.000' },
+    { value: '5000', label: 'R$ 5.000' },
+    { value: '10000', label: 'R$ 10.000' },
+    { value: '25000', label: 'R$ 25.000' },
+    { value: '50000', label: 'R$ 50.000' }
+  ];
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -44,49 +70,114 @@ function InvestmentAmountScreen({ navigation }) {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.card}>
-            <Text style={styles.investmentTitle}>Quanto você deseja investir?</Text>
+            <View style={styles.investmentTitleContainer}>
+              <Ionicons name="wallet" size={28} color={colors.accent} style={styles.investmentIcon} />
+              <Text style={styles.investmentTitle}>Quanto você deseja investir?</Text>
+            </View>
             <Text style={styles.investmentSubtitle}>
-              Defina o valor que você gostaria de investir nesta oportunidade
+              Defina o valor que você gostaria de investir nesta oportunidade. O valor mínimo é de R$ 100,00.
             </Text>
 
-            <View style={styles.amountInputContainer}>
+            <View style={[
+              styles.amountInputContainer,
+              inputFocused && styles.amountInputContainerFocused,
+              !isValidAmount && amount && styles.amountInputContainerError
+            ]}>
+              <Text style={styles.currencySymbol}>R$</Text>
               <TextInput
                 style={styles.amountInput}
-                value={amount}
+                value={amount.replace('R$', '').trim()}
                 onChangeText={handleAmountChange}
-                placeholder="R$ 0,00"
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
+                placeholder="0,00"
                 keyboardType="numeric"
                 placeholderTextColor={colors.sub}
+                selectionColor={colors.accent}
               />
             </View>
 
+            {/* Feedback de validação */}
+            {amount && !isValidAmount && (
+              <View style={styles.validationContainer}>
+                <Ionicons name="alert-circle" size={16} color="#EF4444" />
+                <Text style={styles.validationText}>
+                  Valor mínimo de investimento: R$ 100,00
+                </Text>
+              </View>
+            )}
+
+            {isHighAmount && (
+              <View style={styles.warningContainer}>
+                <Ionicons name="information-circle" size={16} color="#F59E0B" />
+                <Text style={styles.warningText}>
+                  Investimento de alto valor. Certifique-se de que está dentro do seu perfil de risco.
+                </Text>
+              </View>
+            )}
+
+            {/* Valores sugeridos */}
             <View style={styles.suggestedAmounts}>
               <Text style={styles.suggestedTitle}>Valores sugeridos:</Text>
               <View style={styles.suggestedGrid}>
-                {['1000', '5000', '10000', '25000'].map((value) => (
+                {suggestedValues.map((item) => (
                   <TouchableOpacity
-                    key={value}
-                    style={styles.suggestedButton}
-                    onPress={() => setAmount(formatCurrency(value + '00'))}
+                    key={item.value}
+                    style={[
+                      styles.suggestedButton,
+                      selectedSuggestion === item.value && styles.suggestedButtonSelected
+                    ]}
+                    onPress={() => handleSuggestionPress(item.value)}
                   >
-                    <Text style={styles.suggestedButtonText}>
-                      {formatCurrency(value + '00')}
+                    <Text style={[
+                      styles.suggestedButtonText,
+                      selectedSuggestion === item.value && styles.suggestedButtonTextSelected
+                    ]}>
+                      {item.label}
                     </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
+
+            {/* Informações adicionais */}
+            {isValidAmount && (
+              <View style={styles.investmentInfoContainer}>
+                <View style={styles.investmentInfoRow}>
+                  <Ionicons name="trending-up" size={16} color={colors.accent} />
+                  <Text style={styles.investmentInfoText}>
+                    Rentabilidade estimada: {((numericAmount * 0.12) / 12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}/mês
+                  </Text>
+                </View>
+                <View style={styles.investmentInfoRow}>
+                  <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+                  <Text style={styles.investmentInfoText}>
+                    Investimento protegido pelo FGC
+                  </Text>
+                </View>
+              </View>
+            )}
           </View>
         </ScrollView>
 
-        <TouchableOpacity
-          style={[styles.continueButton, !amount && styles.continueButtonDisabled]}
-          onPress={() => amount && navigation.navigate('InvestorProfile')}
-          disabled={!amount}
-        >
-          <Text style={styles.continueButtonText}>Avançar</Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-        </TouchableOpacity>
+        <View style={styles.continueButtonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.continueButton, 
+              !isValidAmount && styles.continueButtonDisabled
+            ]}
+            onPress={() => isValidAmount && navigation.navigate('InvestorProfile')}
+            disabled={!isValidAmount}
+          >
+            <Text style={[
+              styles.continueButtonText,
+              !isValidAmount && styles.continueButtonTextDisabled
+            ]}>
+              {isValidAmount ? 'Continuar' : 'Insira um valor válido'}
+            </Text>
+            {isValidAmount && <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />}
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
