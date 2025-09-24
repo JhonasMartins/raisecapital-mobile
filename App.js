@@ -37,12 +37,9 @@ function InvestmentAmountScreen({ navigation }) {
   const isHighAmount = numericAmount >= 50000; // Valor alto para mostrar aviso
 
   const suggestedValues = [
-    { value: '500', label: 'R$ 500' },
-    { value: '1000', label: 'R$ 1.000' },
-    { value: '5000', label: 'R$ 5.000' },
-    { value: '10000', label: 'R$ 10.000' },
-    { value: '25000', label: 'R$ 25.000' },
-    { value: '50000', label: 'R$ 50.000' }
+    { value: '11800', label: 'R$ 11.800' },
+    { value: '15000', label: 'R$ 15.000' },
+    { value: '25000', label: 'R$ 25.000' }
   ];
 
   return (
@@ -4517,10 +4514,10 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.cardBorder,
     borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    paddingVertical: 18,
+    paddingHorizontal: 24,
     flex: 1,
-    minWidth: '22%',
+    minWidth: '30%',
     alignItems: 'center',
     shadowColor: colors.shadow,
     shadowOpacity: 0.05,
