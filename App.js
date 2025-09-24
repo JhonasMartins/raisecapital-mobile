@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Modal } from 'react-native';
 
