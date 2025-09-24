@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, Modal } from 'react-native';
 
 // Páginas do Processo de Investimento
 function InvestmentAmountScreen({ navigation }) {
@@ -100,6 +100,7 @@ function InvestorProfileScreen({ navigation }) {
     perfilInvestidor: '',
     aceitaTermos: false
   });
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const updateField = (field, value) => {
     setProfileData(prev => ({ ...prev, [field]: value }));
@@ -203,27 +204,13 @@ function InvestorProfileScreen({ navigation }) {
 
             <View style={styles.termsContainer}>
               <Text style={styles.termsTitle}>Termo de Ciência de Risco</Text>
-              <ScrollView style={styles.termsScroll}>
-                <Text style={styles.termsText}>
-                  Eu, <Text style={styles.termsHighlight}>Nome do usuário</Text>, declaro estar ciente dos riscos advindos do investimento que estou realizando, inclusive:
-                  {'\n\n'}
-                  a) da possibilidade de perda da totalidade do capital investido em decorrência do insucesso da Emissora, na condição de sociedade empresária de pequeno porte;
-                  {'\n\n'}
-                  b) quando aplicável, do risco advindo da aquisição ou da conversão dos valores mobiliários de que é titular em participação em na Emissora, na condição de sociedade empresária de pequeno porte, que, dependendo do tipo societário adotado, pode acarretar riscos ao seu patrimônio pessoal em razão de sua responsabilidade patrimonial limitada não ser reconhecida em decisões judiciais nas esferas trabalhistas, previdenciária e tributária, entre outras;
-                  {'\n\n'}
-                  c) dos riscos associados à detenção de posição minoritária na Emissora, na condição de sociedade empresária de pequeno porte, considerando a influência que os seus controladores possam vir a exercer em eventos corporativos como a emissão adicional de valores mobiliários, alienação do controle ou de ativos, e transações com partes relacionadas;
-                  {'\n\n'}
-                  d) do risco de crédito da Emissora, na condição de sociedade empresária de pequeno porte, quando da emissão de títulos representativos de dívida;
-                  {'\n\n'}
-                  e) do risco associado às dificuldades que possa enfrentar para vender valores mobiliários da Emissora, na condição de sociedade empresária de pequeno porte, não registrada na CVM e que não são admitidos à negociação em mercados regulamentados;
-                  {'\n\n'}
-                  f) de que da Emissora, na condição de sociedade empresária de pequeno porte, não é registrada na CVM e que pode não haver prestação de informações contínuas pela Emissora após a realização da oferta; e
-                  {'\n\n'}
-                  g) de que não existe obrigação, definida em lei ou regulamentação, da sociedade empresária de pequeno porte, como é o caso da Emissora, que não seja constituída como sociedade anônima em transformar-se neste tipo de sociedade.
-                  {'\n\n'}
-                  Também declaro que li e estou ciente dos Fatores de Risco disponibilizados na página do projeto no site da Raise Capital.
-                </Text>
-              </ScrollView>
+              
+              <TouchableOpacity
+                style={styles.termsButton}
+                onPress={() => setShowTermsModal(true)}
+              >
+                <Text style={styles.termsButtonText}>Termo de ciência de risco</Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.checkboxContainer}
@@ -249,6 +236,50 @@ function InvestorProfileScreen({ navigation }) {
           <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Modal do Termo de Ciência de Risco */}
+      <Modal
+        visible={showTermsModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowTermsModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Termo de Ciência de Risco</Text>
+              <TouchableOpacity
+                style={styles.modalCloseButton}
+                onPress={() => setShowTermsModal(false)}
+              >
+                <Ionicons name="close" size={20} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={styles.modalScroll}>
+              <Text style={styles.modalText}>
+                Eu, <Text style={styles.modalHighlight}>Nome do usuário</Text>, declaro estar ciente dos riscos advindos do investimento que estou realizando, inclusive:
+                {'\n\n'}
+                a) da possibilidade de perda da totalidade do capital investido em decorrência do insucesso da Emissora, na condição de sociedade empresária de pequeno porte;
+                {'\n\n'}
+                b) quando aplicável, do risco advindo da aquisição ou da conversão dos valores mobiliários de que é titular em participação em na Emissora, na condição de sociedade empresária de pequeno porte, que, dependendo do tipo societário adotado, pode acarretar riscos ao seu patrimônio pessoal em razão de sua responsabilidade patrimonial limitada não ser reconhecida em decisões judiciais nas esferas trabalhistas, previdenciária e tributária, entre outras;
+                {'\n\n'}
+                c) dos riscos associados à detenção de posição minoritária na Emissora, na condição de sociedade empresária de pequeno porte, considerando a influência que os seus controladores possam vir a exercer em eventos corporativos como a emissão adicional de valores mobiliários, alienação do controle ou de ativos, e transações com partes relacionadas;
+                {'\n\n'}
+                d) do risco de crédito da Emissora, na condição de sociedade empresária de pequeno porte, quando da emissão de títulos representativos de dívida;
+                {'\n\n'}
+                e) do risco associado às dificuldades que possa enfrentar para vender valores mobiliários da Emissora, na condição de sociedade empresária de pequeno porte, não registrada na CVM e que não são admitidos à negociação em mercados regulamentados;
+                {'\n\n'}
+                f) de que da Emissora, na condição de sociedade empresária de pequeno porte, não é registrada na CVM e que pode não haver prestação de informações contínuas pela Emissora após a realização da oferta; e
+                {'\n\n'}
+                g) de que não existe obrigação, definida em lei ou regulamentação, da sociedade empresária de pequeno porte, como é o caso da Emissora, que não seja constituída como sociedade anônima em transformar-se neste tipo de sociedade.
+                {'\n\n'}
+                Também declaro que li e estou ciente dos Fatores de Risco disponibilizados na página do projeto no site da Raise Capital.
+              </Text>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -4164,5 +4195,154 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
     letterSpacing: -0.2,
+  },
+  
+  // Estilos para a tela de perfil do investidor
+  formContainer: {
+    marginTop: 8,
+  },
+  formSubLabel: {
+    fontSize: 13,
+    color: colors.sub,
+    marginBottom: 16,
+    fontWeight: '500',
+  },
+  radioGroup: {
+    gap: 16,
+  },
+  radioOption: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  radioCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.cardBorder,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  radioCircleSelected: {
+    borderColor: colors.accent,
+  },
+  radioInner: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.accent,
+  },
+  radioText: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 20,
+  },
+  termsContainer: {
+    marginTop: 24,
+    borderTopWidth: 1,
+    borderTopColor: colors.cardBorder,
+    paddingTop: 24,
+  },
+  termsTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 16,
+    letterSpacing: -0.2,
+  },
+  termsButton: {
+    backgroundColor: colors.card2,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  termsButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.accent,
+    letterSpacing: -0.1,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: colors.cardBorder,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  checkboxChecked: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  checkboxText: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 20,
+  },
+  
+  // Estilos para o modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  modalContent: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 24,
+    maxHeight: '80%',
+    width: '100%',
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 8,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  modalCloseButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: colors.card2,
+  },
+  modalScroll: {
+    maxHeight: 400,
+    marginBottom: 20,
+  },
+  modalText: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 22,
+  },
+  modalHighlight: {
+    fontWeight: '600',
+    color: colors.text,
   },
 });
